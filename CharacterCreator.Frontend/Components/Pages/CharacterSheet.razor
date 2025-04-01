@@ -1,20 +1,51 @@
 ﻿@page "/character"
+@using CharacterCreator.ClassLibrary
+@using CharacterCreator.ClassLibrary.Main
 
 <h1>Character Sheet</h1>
 
-<div class="character-details">
-    <p><strong>Name:</strong> Gandalf</p>
-    <p><strong>Class:</strong> Wizard</p>
-    <p><strong>Species:</strong> Maiar</p>
-    <p><strong>Level:</strong> 20</p>
+@if (character == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="character-details">
+        <p><strong>Name:</strong> @character.Name</p>
+        <p><strong>Class:</strong> @character.CharacterClass</p>
+        <p><strong>Species:</strong> @character.Species</p>
+        <p><strong>Level:</strong> @character.Level</p>
 
-    <h3>Main Attributes</h3>
-    <ul>
-        <li><strong>Strength:</strong> 10</li>
-        <li><strong>Dexterity:</strong> 14</li>
-        <li><strong>Constitution:</strong> 12</li>
-        <li><strong>Intelligence:</strong> 18</li>
-        <li><strong>Wisdom:</strong> 16</li>
-        <li><strong>Charisma:</strong> 15</li>
-    </ul>
-</div>
+        <h3>Main Attributes</h3>
+        <ul>
+            <li><strong>Strength:</strong> @character.Strength</li>
+            <li><strong>Dexterity:</strong> @character.Dexterity</li>
+            <li><strong>Constitution:</strong> @character.Constitution</li>
+            <li><strong>Intelligence:</strong> @character.Intelligence</li>
+            <li><strong>Wisdom:</strong> @character.Wisdom</li>
+            <li><strong>Charisma:</strong> @character.Charisma</li>
+        </ul>
+    </div>
+}
+
+@code {
+    private Character character;
+
+    protected override void OnInitialized()
+    {
+        // Create a dummy character with hardcoded values
+        character = new Character
+            {
+                Name = "Gandalf",
+                CharacterClass = "Wizard",
+                Species = "Human",
+                Level = 20,
+                Strength = 10,
+                Dexterity = 14,
+                Constitution = 12,
+                Intelligence = 18,
+                Wisdom = 16,
+                Charisma = 15
+            };
+    }
+}

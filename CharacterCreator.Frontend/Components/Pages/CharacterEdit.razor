@@ -1,0 +1,112 @@
+﻿@page "/edit-character"
+@rendermode InteractiveServer
+
+@using CharacterCreator.ClassLibrary.Main
+@using System.Text.Json
+
+<h3>Edit Character</h3>
+
+<div class="form-group">
+    <label for="characterName">Character Name:</label>
+    <InputText id="characterName" class="form-control" @bind-Value="character.Name" />
+</div>
+
+<div class="form-group">
+    <label for="characterClass">Character Class:</label>
+    <InputText id="characterClass" class="form-control" @bind-Value="character.CharacterClass" />
+</div>
+
+<div class="form-group">
+    <label for="species">Species:</label>
+    <InputText id="species" class="form-control" @bind-Value="character.Species" />
+</div>
+
+<div class="form-group">
+    <label for="level">Level:</label>
+    <InputNumber id="level" class="form-control" @bind-Value="character.Level" />
+</div>
+
+<div class="form-group">
+    <label for="strength">Strength:</label>
+    <InputNumber id="strength" class="form-control" @bind-Value="character.Strength" />
+</div>
+
+<div class="form-group">
+    <label for="dexterity">Dexterity:</label>
+    <InputNumber id="dexterity" class="form-control" @bind-Value="character.Dexterity" />
+</div>
+
+<div class="form-group">
+    <label for="constitution">Constitution:</label>
+    <InputNumber id="constitution" class="form-control" @bind-Value="character.Constitution" />
+</div>
+
+<div class="form-group">
+    <label for="intelligence">Intelligence:</label>
+    <InputNumber id="intelligence" class="form-control" @bind-Value="character.Intelligence" />
+</div>
+
+<div class="form-group">
+    <label for="wisdom">Wisdom:</label>
+    <InputNumber id="wisdom" class="form-control" @bind-Value="character.Wisdom" />
+</div>
+
+<div class="form-group">
+    <label for="charisma">Charisma:</label>
+    <InputNumber id="charisma" class="form-control" @bind-Value="character.Charisma" />
+</div>
+
+<button class="btn btn-primary" @onclick="SaveCharacter">Save</button>
+
+@code {
+    // The character will either be loaded from a JSON file or initialized with empty values.
+    private Character character = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Check if a saved JSON file exists
+        if (File.Exists("character.json"))
+        {
+            try
+            {
+                var json = await File.ReadAllTextAsync("character.json");
+                // Attempt to deserialize the JSON into a Character object
+                character = JsonSerializer.Deserialize<Character>(json);
+            }
+            catch (Exception)
+            {
+                // If there's an error during deserialization, fallback to an empty character.
+                character = null;
+            }
+        }
+
+        // If no saved character was found or deserialization failed, initialize a new, empty character.
+        if (character == null)
+        {
+            character = new Character
+                {
+                    Name = "",
+                    CharacterClass = "",
+                    Species = "",
+                    Level = 0,
+                    Strength = 0,
+                    Dexterity = 0,
+                    Constitution = 0,
+                    Intelligence = 0,
+                    Wisdom = 0,
+                    Charisma = 0
+                };
+        }
+    }
+
+    private async Task SaveCharacter(MouseEventArgs e)
+    {
+        // Create JSON options for better readability (optional)
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        // Serialize the character object to a JSON string
+        var json = JsonSerializer.Serialize(character, options);
+
+        // Save the JSON string to a file on the server (adjust the file path as necessary)
+        await File.WriteAllTextAsync("character.json", json);
+    }
+}

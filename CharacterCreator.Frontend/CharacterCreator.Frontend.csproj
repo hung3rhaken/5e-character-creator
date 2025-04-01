@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CharacterCreator.ClassLibrary\CharacterCreator.ClassLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

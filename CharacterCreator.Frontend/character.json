@@ -1,0 +1,13 @@
+{
+  "Name": "Trubadur",
+  "CharacterClass": "Fighter",
+  "Species": "Human",
+  "Level": 3,
+  "Strength": 16,
+  "Dexterity": 14,
+  "Constitution": 12,
+  "Intelligence": 12,
+  "Wisdom": 16,
+  "Charisma": 15,
+  "FullTitle": "Trubadur the Great"
+}
