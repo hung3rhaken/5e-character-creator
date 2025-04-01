@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="ability">
+    <label>@Label</label>
+    <InputNumber class="form-control ability-score"
+    Value="@Score"
+    ValueChanged="ScoreChanged"
+    ValueExpression="@( () => Score )" />
+    <div class="modifier">
+        Mod: @ModifierDisplay
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public int Score { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ScoreChanged { get; set; }
+
+    private int Modifier => (int)Math.Floor((Score - 10) / 2.0);
+
+    // Return the modifier as a string with a '+' if it is non-negative.
+    private string ModifierDisplay => Modifier > 0 ? $"+{Modifier}" : Modifier.ToString();
+}

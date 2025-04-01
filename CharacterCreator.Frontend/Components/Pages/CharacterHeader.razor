@@ -1,0 +1,27 @@
+﻿@using CharacterCreator.ClassLibrary.Main
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+
+<div class="header-row">
+    <div class="header-field">
+        <label>Character Name</label>
+        <InputText class="form-control" @bind-Value="Character.Name" />
+    </div>
+    <div class="header-field">
+        <label>Class</label>
+        <InputText class="form-control" @bind-Value="Character.CharacterClass" />
+    </div>
+    <div class="header-field">
+        <label>Species</label>
+        <InputText class="form-control" @bind-Value="Character.Species" />
+    </div>
+    <div class="header-field">
+        <label>Level</label>
+        <InputNumber class="form-control" @bind-Value="Character.Level" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Character Character { get; set; }
+}

@@ -13,79 +13,20 @@
 else
 {
     <div class="dnd-character-sheet">
-        <!-- ======== Header (Name, Class, Species, Level) ======== -->
-        <div class="header-row">
-            <div class="character-name">
-                <label>Character Name</label>
-                <InputText class="form-control" @bind-Value="character.Name" />
-            </div>
-            <div class="character-class">
-                <label>Class</label>
-                <InputText class="form-control" @bind-Value="character.CharacterClass" />
-            </div>
-            <div class="character-species">
-                <label>Species</label>
-                <InputText class="form-control" @bind-Value="character.Species" />
-            </div>
-            <div class="character-level">
-                <label>Level</label>
-                <InputNumber class="form-control" @bind-Value="character.Level" />
-            </div>
-        </div>
+        <!-- Header Component -->
+        <CharacterHeader Character="character" />
 
-        <!-- ======== Abilities Row (STR, DEX, CON, INT, WIS, CHA) ======== -->
+        <!-- Abilities Row -->
         <div class="abilities-row">
-            <div class="ability">
-                <label>Strength</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Strength" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Strength)
-                </div>
-            </div>
-            <div class="ability">
-                <label>Dexterity</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Dexterity" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Dexterity)
-                </div>
-            </div>
-            <div class="ability">
-                <label>Constitution</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Constitution" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Constitution)
-                </div>
-            </div>
-            <div class="ability">
-                <label>Intelligence</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Intelligence" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Intelligence)
-                </div>
-            </div>
-            <div class="ability">
-                <label>Wisdom</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Wisdom" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Wisdom)
-                </div>
-            </div>
-            <div class="ability">
-                <label>Charisma</label>
-                <InputNumber class="form-control ability-score"
-                             @bind-Value="character.Charisma" />
-                <div class="modifier">
-                    Mod: @GetModifier(character.Charisma)
-                </div>
-            </div>
+            <AbilityInput Label="Strength" Score="@character.Strength" ScoreChanged="@(value => character.Strength = value)" />
+            <AbilityInput Label="Dexterity" Score="@character.Dexterity" ScoreChanged="@(value => character.Dexterity = value)" />
+            <AbilityInput Label="Constitution" Score="@character.Constitution" ScoreChanged="@(value => character.Constitution = value)" />
+            <AbilityInput Label="Intelligence" Score="@character.Intelligence" ScoreChanged="@(value => character.Intelligence = value)" />
+            <AbilityInput Label="Wisdom" Score="@character.Wisdom" ScoreChanged="@(value => character.Wisdom = value)" />
+            <AbilityInput Label="Charisma" Score="@character.Charisma" ScoreChanged="@(value => character.Charisma = value)" />
         </div>
 
-        <!-- ======== Save Button ======== -->
+        <!-- Save Button -->
         <button class="btn btn-primary mt-3" @onclick="SaveCharacter">Save</button>
     </div>
 }
