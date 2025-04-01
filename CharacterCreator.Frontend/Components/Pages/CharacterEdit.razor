@@ -6,61 +6,93 @@
 
 <h3>Edit Character</h3>
 
-<div class="form-group">
-    <label for="characterName">Character Name:</label>
-    <InputText id="characterName" class="form-control" @bind-Value="character.Name" />
-</div>
+@if (character == null)
+{
+    <p>Loading character data...</p>
+}
+else
+{
+    <div class="dnd-character-sheet">
+        <!-- ======== Header (Name, Class, Species, Level) ======== -->
+        <div class="header-row">
+            <div class="character-name">
+                <label>Character Name</label>
+                <InputText class="form-control" @bind-Value="character.Name" />
+            </div>
+            <div class="character-class">
+                <label>Class</label>
+                <InputText class="form-control" @bind-Value="character.CharacterClass" />
+            </div>
+            <div class="character-species">
+                <label>Species</label>
+                <InputText class="form-control" @bind-Value="character.Species" />
+            </div>
+            <div class="character-level">
+                <label>Level</label>
+                <InputNumber class="form-control" @bind-Value="character.Level" />
+            </div>
+        </div>
 
-<div class="form-group">
-    <label for="characterClass">Character Class:</label>
-    <InputText id="characterClass" class="form-control" @bind-Value="character.CharacterClass" />
-</div>
+        <!-- ======== Abilities Row (STR, DEX, CON, INT, WIS, CHA) ======== -->
+        <div class="abilities-row">
+            <div class="ability">
+                <label>Strength</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Strength" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Strength)
+                </div>
+            </div>
+            <div class="ability">
+                <label>Dexterity</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Dexterity" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Dexterity)
+                </div>
+            </div>
+            <div class="ability">
+                <label>Constitution</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Constitution" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Constitution)
+                </div>
+            </div>
+            <div class="ability">
+                <label>Intelligence</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Intelligence" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Intelligence)
+                </div>
+            </div>
+            <div class="ability">
+                <label>Wisdom</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Wisdom" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Wisdom)
+                </div>
+            </div>
+            <div class="ability">
+                <label>Charisma</label>
+                <InputNumber class="form-control ability-score"
+                             @bind-Value="character.Charisma" />
+                <div class="modifier">
+                    Mod: @GetModifier(character.Charisma)
+                </div>
+            </div>
+        </div>
 
-<div class="form-group">
-    <label for="species">Species:</label>
-    <InputText id="species" class="form-control" @bind-Value="character.Species" />
-</div>
-
-<div class="form-group">
-    <label for="level">Level:</label>
-    <InputNumber id="level" class="form-control" @bind-Value="character.Level" />
-</div>
-
-<div class="form-group">
-    <label for="strength">Strength:</label>
-    <InputNumber id="strength" class="form-control" @bind-Value="character.Strength" />
-</div>
-
-<div class="form-group">
-    <label for="dexterity">Dexterity:</label>
-    <InputNumber id="dexterity" class="form-control" @bind-Value="character.Dexterity" />
-</div>
-
-<div class="form-group">
-    <label for="constitution">Constitution:</label>
-    <InputNumber id="constitution" class="form-control" @bind-Value="character.Constitution" />
-</div>
-
-<div class="form-group">
-    <label for="intelligence">Intelligence:</label>
-    <InputNumber id="intelligence" class="form-control" @bind-Value="character.Intelligence" />
-</div>
-
-<div class="form-group">
-    <label for="wisdom">Wisdom:</label>
-    <InputNumber id="wisdom" class="form-control" @bind-Value="character.Wisdom" />
-</div>
-
-<div class="form-group">
-    <label for="charisma">Charisma:</label>
-    <InputNumber id="charisma" class="form-control" @bind-Value="character.Charisma" />
-</div>
-
-<button class="btn btn-primary" @onclick="SaveCharacter">Save</button>
+        <!-- ======== Save Button ======== -->
+        <button class="btn btn-primary mt-3" @onclick="SaveCharacter">Save</button>
+    </div>
+}
 
 @code {
     // The character will either be loaded from a JSON file or initialized with empty values.
-    private Character character = new();
+    private Character character;
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,19 +115,7 @@
         // If no saved character was found or deserialization failed, initialize a new, empty character.
         if (character == null)
         {
-            character = new Character
-                {
-                    Name = "",
-                    CharacterClass = "",
-                    Species = "",
-                    Level = 0,
-                    Strength = 0,
-                    Dexterity = 0,
-                    Constitution = 0,
-                    Intelligence = 0,
-                    Wisdom = 0,
-                    Charisma = 0
-                };
+            character = new();
         }
     }
 
@@ -108,5 +128,11 @@
 
         // Save the JSON string to a file on the server (adjust the file path as necessary)
         await File.WriteAllTextAsync("character.json", json);
+    }
+
+    // Compute the attribute modifier using the standard D&D formula.
+    private int GetModifier(int score)
+    {
+        return (int)Math.Floor((score - 10) / 2.0);
     }
 }
