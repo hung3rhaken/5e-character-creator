@@ -1,6 +1,7 @@
 ﻿@page "/character"
 @using CharacterCreator.ClassLibrary
 @using CharacterCreator.ClassLibrary.Main
+@using CharacterCreator.ClassLibrary.Main.CharacterClasses
 
 <h1>Character Sheet</h1>
 
@@ -12,7 +13,7 @@ else
 {
     <div class="character-details">
         <p><strong>Name:</strong> @character.Name</p>
-        <p><strong>Class:</strong> @character.CharacterClass</p>
+        <p><strong>Class:</strong> @character.CharacterClassName</p>
         <p><strong>Species:</strong> @character.Species</p>
         <p><strong>Level:</strong> @character.Level</p>
 
@@ -29,15 +30,15 @@ else
 }
 
 @code {
-    private Character character;
+    private CharacterBase character;
 
     protected override void OnInitialized()
     {
         // Create a dummy character with hardcoded values
-        character = new Character
+        character = new Character<Fighter>
             {
                 Name = "Gandalf",
-                CharacterClass = "Wizard",
+                CharacterClassName = "Fighter",
                 Species = "Human",
                 Level = 20,
                 Strength = new Ability("Strength", 10),

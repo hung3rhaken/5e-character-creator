@@ -5,6 +5,7 @@
 
 @using CharacterCreator.ClassLibrary.Main
 @using System.Text.Json
+@using CharacterCreator.ClassLibrary.Main.CharacterClasses
 @using CharacterCreator.Frontend.Services
 
 <h3>Edit Character</h3>
@@ -28,6 +29,7 @@
 else
 {
     <div class="dnd-character-sheet">
+
         <!-- Header Component -->
         <CharacterHeader Character="character" />
 
@@ -39,17 +41,6 @@ else
             <AbilityInput Ability="@character.Intelligence" ScoreChanged="@(value => character.Intelligence.Score = value)" />
             <AbilityInput Ability="@character.Wisdom" ScoreChanged="@(value => character.Wisdom.Score = value)" />
             <AbilityInput Ability="@character.Charisma" ScoreChanged="@(value => character.Charisma.Score = value)" />
-
-         @*    <AbilityInput 
-            Label="Dexterity" Score="@character.Dexterity" Modifier="@character.DexterityModifier" ScoreChanged="@(value => character.Dexterity = value)" />
-            <AbilityInput 
-            Label="Constitution" Score="@character.Constitution" Modifier="@character.ConstitutionModifier" ScoreChanged="@(value => character.Constitution = value)" />
-            <AbilityInput 
-            Label="Intelligence" Score="@character.Intelligence" Modifier="@character.IntelligenceModifier" ScoreChanged="@(value => character.Intelligence = value)" />
-            <AbilityInput 
-            Label="Wisdom" Score="@character.Wisdom" Modifier="@character.WisdomModifier" ScoreChanged="@(value => character.Wisdom = value)" />
-            <AbilityInput 
-            Label="Charisma" Score="@character.Charisma" Modifier="@character.CharismaModifier" ScoreChanged="@(value => character.Charisma = value)" /> *@
         </div>
     </div>
 
@@ -66,7 +57,7 @@ else
     private string selectedCharacter = "";
 
     // The current character being edited.
-    private Character? character;
+    private CharacterBase? character;
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,7 +82,7 @@ else
         else
         {
             // If "-- New Character --" is selected, initialize a new character.
-            character = new();
+            character = new Character<Fighter>();
         }
     }
 

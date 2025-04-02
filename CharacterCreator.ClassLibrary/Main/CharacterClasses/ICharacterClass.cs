@@ -7,5 +7,5 @@ public interface ICharacterClass
     /// <summary>
     /// Applies default ability values (and other defaults) to the given character.
     /// </summary>
-    void ApplyDefaults(Character character);
+    void ApplyDefaults<T>(Character<T> character) where T : ICharacterClass, new();
 }

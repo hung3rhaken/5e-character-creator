@@ -8,7 +8,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Configure HttpClient to target your API URL (adjust as needed)
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7238/character") });
+builder.Services.AddScoped(sp => new HttpClient 
+{ 
+    BaseAddress = new Uri("https://localhost:7238/character")
+});
 
 // Register the CharacterService
 builder.Services.AddScoped<CharacterService>();

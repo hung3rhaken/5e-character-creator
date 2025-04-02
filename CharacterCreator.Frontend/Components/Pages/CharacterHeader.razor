@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label>Class:</label>
-                    <InputText class="form-control" @bind-Value="Character.CharacterClass" />
+                    <InputText class="form-control" @bind-Value="Character.CharacterClassName" />
                 </div>
             </div>
             <!-- Column 2: Subclass, Background, Alignment -->
@@ -108,5 +108,5 @@
 
 @code {
     [Parameter]
-    public Character Character { get; set; }
+    public CharacterBase Character { get; set; }
 }
