@@ -1,15 +1,16 @@
-﻿@using Microsoft.AspNetCore.Components
+﻿@using CharacterCreator.ClassLibrary.Main
+@using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Forms
 
 <div class="ability">
-    <label class="ability-label">@Label</label>
+    <label class="ability-label">@Ability.Name</label>
     <div class="score-with-mod">
         <div class="score-wrapper">
             <InputNumber class="form-control ability-score"
             
-                         Value="@Score"
+                         Value="@Ability.Score"
                          ValueChanged="ScoreChanged"
-                         ValueExpression="@( () => Score )" 
+                         ValueExpression="@( () => Ability.Score )"
                          max="30"
                          min="0"/>
         </div>
@@ -21,17 +22,11 @@
 
 @code {
     [Parameter]
-    public string Label { get; set; }
-
-    [Parameter]
-    public int Score { get; set; }
+    public Ability Ability { get; set; }
 
     [Parameter]
     public EventCallback<int> ScoreChanged { get; set; }
 
-    [Parameter]
-    public int Modifier { get; set; }
-
     // Return the modifier as a string with a '+' if it is non-negative.
-    private string ModifierDisplay => Modifier > 0 ? $"+{Modifier}" : Modifier.ToString();
+    private string ModifierDisplay => Ability.Modifier > 0 ? $"+{Ability.Modifier}" : Ability.Modifier.ToString();
 }

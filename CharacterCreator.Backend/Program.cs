@@ -60,17 +60,6 @@ app.MapGet("/characters", async () =>
     var files = Directory.GetFiles(dataFolder, "*.json");
     var characterNames = files.Select(file => Path.GetFileNameWithoutExtension(file)).ToList();
     return Results.Ok(characterNames);
-
-    if (File.Exists(filePath))
-    {
-        var json = await File.ReadAllTextAsync(filePath);
-        var character = JsonSerializer.Deserialize<Character>(json);
-
-        // Return the JSON content with a 200 OK
-        return Results.Ok(character);
-    }
-    // If the file does not exist, return a 404 Not Found response
-    return Results.NotFound("No character data found");
 })
 .WithName("GetAllCharacterNames")
 .WithOpenApi();

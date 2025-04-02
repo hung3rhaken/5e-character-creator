@@ -13,6 +13,7 @@
     <label>Select a character:</label>
     <select value="@selectedCharacter" @onchange="OnCharacterChanged" class="form-control d-inline-block" style="max-width: 300px;">
         <option value="">-- New Character --</option>
+        <option value="">-- New Character --</option>
         @foreach (var name in availableCharacterNames)
         {
             <option value="@name">@name</option>
@@ -32,9 +33,14 @@ else
 
         <!-- Abilities Row -->
         <div class="abilities-row">
-            <AbilityInput 
-            Label="Strength" Score="@character.Strength" Modifier="@character.StrengthModifier" ScoreChanged="@(value => character.Strength = value)" />
-            <AbilityInput 
+            <AbilityInput Ability="@character.Strength" ScoreChanged="@(value => character.Strength.Score = value)" />
+            <AbilityInput Ability="@character.Dexterity" ScoreChanged="@(value => character.Dexterity.Score = value)" />
+            <AbilityInput Ability="@character.Constitution" ScoreChanged="@(value => character.Constitution.Score = value)" />
+            <AbilityInput Ability="@character.Intelligence" ScoreChanged="@(value => character.Intelligence.Score = value)" />
+            <AbilityInput Ability="@character.Wisdom" ScoreChanged="@(value => character.Wisdom.Score = value)" />
+            <AbilityInput Ability="@character.Charisma" ScoreChanged="@(value => character.Charisma.Score = value)" />
+
+         @*    <AbilityInput 
             Label="Dexterity" Score="@character.Dexterity" Modifier="@character.DexterityModifier" ScoreChanged="@(value => character.Dexterity = value)" />
             <AbilityInput 
             Label="Constitution" Score="@character.Constitution" Modifier="@character.ConstitutionModifier" ScoreChanged="@(value => character.Constitution = value)" />
@@ -43,11 +49,12 @@ else
             <AbilityInput 
             Label="Wisdom" Score="@character.Wisdom" Modifier="@character.WisdomModifier" ScoreChanged="@(value => character.Wisdom = value)" />
             <AbilityInput 
-            Label="Charisma" Score="@character.Charisma" Modifier="@character.CharismaModifier" ScoreChanged="@(value => character.Charisma = value)" />
+            Label="Charisma" Score="@character.Charisma" Modifier="@character.CharismaModifier" ScoreChanged="@(value => character.Charisma = value)" /> *@
         </div>
+    </div>
 
-        <!-- Save Button -->
-        <button class="btn btn-primary mt-3" @onclick="SaveCharacter">Save</button>
+    <div class="save-container text-center mt-3">
+        <button class="btn btn-primary" @onclick="SaveCharacter">Save</button>
     </div>
 }
 
@@ -84,19 +91,7 @@ else
         else
         {
             // If "-- New Character --" is selected, initialize a new character.
-            character = new Character
-                {
-                    Name = "",
-                    CharacterClass = "",
-                    Species = "",
-                    Level = 0,
-                    Strength = 0,
-                    Dexterity = 0,
-                    Constitution = 0,
-                    Intelligence = 0,
-                    Wisdom = 0,
-                    Charisma = 0
-                };
+            character = new();
         }
     }
 

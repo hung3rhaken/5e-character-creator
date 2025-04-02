@@ -1,29 +1,37 @@
-﻿namespace CharacterCreator.ClassLibrary.Main;
+﻿using CharacterCreator.ClassLibrary.Main.CharacterClasses;
+using System.Text.Json.Serialization;
+
+namespace CharacterCreator.ClassLibrary.Main;
 
 public class Character
 {
     public string Name { get; set; } = string.Empty;
     public string CharacterClass { get; set; } = string.Empty;
+    public string Class { get; set; } = string.Empty;
     public string Species { get; set; } = string.Empty;
     public int Level { get; set; }
-    public int Strength { get; set; }
-    public int Dexterity { get; set; }
-    public int Constitution { get; set; }
-    public int Intelligence { get; set; }
-    public int Wisdom { get; set; }
-    public int Charisma { get; set; }
+    public Ability Strength { get; set; }
+    public Ability Dexterity { get; set; }
+    public Ability Constitution { get; set; }
+    public Ability Intelligence { get; set; }
+    public Ability Wisdom { get; set; }
+    public Ability Charisma { get; set; }
 
-
-    // Computed properties for ability modifiers
-    public int StrengthModifier => CalculateModifier(Strength);
-    public int DexterityModifier => CalculateModifier(Dexterity);
-    public int ConstitutionModifier => CalculateModifier(Constitution);
-    public int IntelligenceModifier => CalculateModifier(Intelligence);
-    public int WisdomModifier => CalculateModifier(Wisdom);
-    public int CharismaModifier => CalculateModifier(Charisma);
-
-    private int CalculateModifier(int score)
+    public Character()
     {
-        return (int)Math.Floor((score - 10) / 2.0);
+        Name = "New Guy";
+        CharacterClass = "";
+        Species = "Human";
+        Level = 1;
+        Strength = new Ability("Strength", 10);
+        Dexterity = new Ability("Dexterity", 10);
+        Constitution = new Ability("Constitution", 10);
+        Intelligence = new Ability("Intelligence", 10);
+        Wisdom = new Ability("Wisdom", 10);
+        Charisma = new Ability("Charisma", 10);
     }
+
+    // This property is used to access class-specific functionality.
+    [JsonIgnore]
+    public ICharacterClass ClassImplementation => CharacterClassFactory.GetAvailableClass(CharacterClass);
 }
