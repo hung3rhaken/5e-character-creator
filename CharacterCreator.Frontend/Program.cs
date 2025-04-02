@@ -1,10 +1,17 @@
 using CharacterCreator.Frontend.Components;
+using CharacterCreator.Frontend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Configure HttpClient to target your API URL (adjust as needed)
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7238/character") });
+
+// Register the CharacterService
+builder.Services.AddScoped<CharacterService>();
 
 var app = builder.Build();
 
@@ -24,4 +31,4 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();

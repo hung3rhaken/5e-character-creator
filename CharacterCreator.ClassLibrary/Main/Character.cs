@@ -13,5 +13,17 @@ public class Character
     public int Wisdom { get; set; }
     public int Charisma { get; set; }
 
-    public string FullTitle => $"{Name} the Great";
+
+    // Computed properties for ability modifiers
+    public int StrengthModifier => CalculateModifier(Strength);
+    public int DexterityModifier => CalculateModifier(Dexterity);
+    public int ConstitutionModifier => CalculateModifier(Constitution);
+    public int IntelligenceModifier => CalculateModifier(Intelligence);
+    public int WisdomModifier => CalculateModifier(Wisdom);
+    public int CharismaModifier => CalculateModifier(Charisma);
+
+    private int CalculateModifier(int score)
+    {
+        return (int)Math.Floor((score - 10) / 2.0);
+    }
 }

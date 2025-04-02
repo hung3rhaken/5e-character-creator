@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterCreator.Frontend", "CharacterCreator.Frontend\CharacterCreator.Frontend.csproj", "{584D90BA-B495-449E-9B93-EED045651E80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{601C3EFC-C670-44DE-9B26-D224852677A1} = {601C3EFC-C670-44DE-9B26-D224852677A1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterCreator.ClassLibrary", "CharacterCreator.ClassLibrary\CharacterCreator.ClassLibrary.csproj", "{C221C4DC-DE8F-4DB0-A632-59119C805278}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterCreator.Backend", "CharacterCreator.Backend\CharacterCreator.Backend.csproj", "{601C3EFC-C670-44DE-9B26-D224852677A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{C221C4DC-DE8F-4DB0-A632-59119C805278}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C221C4DC-DE8F-4DB0-A632-59119C805278}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C221C4DC-DE8F-4DB0-A632-59119C805278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{601C3EFC-C670-44DE-9B26-D224852677A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{601C3EFC-C670-44DE-9B26-D224852677A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{601C3EFC-C670-44DE-9B26-D224852677A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{601C3EFC-C670-44DE-9B26-D224852677A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

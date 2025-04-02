@@ -1,14 +1,28 @@
 ﻿@page "/edit-character"
 @rendermode InteractiveServer
 
+@inject CharacterService _characterService
+
 @using CharacterCreator.ClassLibrary.Main
 @using System.Text.Json
+@using CharacterCreator.Frontend.Services
 
 <h3>Edit Character</h3>
 
+<div class="character-select mb-3">
+    <label>Select a character:</label>
+    <select value="@selectedCharacter" @onchange="OnCharacterChanged" class="form-control d-inline-block" style="max-width: 300px;">
+        <option value="">-- New Character --</option>
+        @foreach (var name in availableCharacterNames)
+        {
+            <option value="@name">@name</option>
+        }
+    </select>
+</div>
+
 @if (character == null)
 {
-    <p>Loading character data...</p>
+    <p>No character loaded. Enter a name and click "Load" to begin.</p>
 }
 else
 {
@@ -18,12 +32,18 @@ else
 
         <!-- Abilities Row -->
         <div class="abilities-row">
-            <AbilityInput Label="Strength" Score="@character.Strength" ScoreChanged="@(value => character.Strength = value)" />
-            <AbilityInput Label="Dexterity" Score="@character.Dexterity" ScoreChanged="@(value => character.Dexterity = value)" />
-            <AbilityInput Label="Constitution" Score="@character.Constitution" ScoreChanged="@(value => character.Constitution = value)" />
-            <AbilityInput Label="Intelligence" Score="@character.Intelligence" ScoreChanged="@(value => character.Intelligence = value)" />
-            <AbilityInput Label="Wisdom" Score="@character.Wisdom" ScoreChanged="@(value => character.Wisdom = value)" />
-            <AbilityInput Label="Charisma" Score="@character.Charisma" ScoreChanged="@(value => character.Charisma = value)" />
+            <AbilityInput 
+            Label="Strength" Score="@character.Strength" Modifier="@character.StrengthModifier" ScoreChanged="@(value => character.Strength = value)" />
+            <AbilityInput 
+            Label="Dexterity" Score="@character.Dexterity" Modifier="@character.DexterityModifier" ScoreChanged="@(value => character.Dexterity = value)" />
+            <AbilityInput 
+            Label="Constitution" Score="@character.Constitution" Modifier="@character.ConstitutionModifier" ScoreChanged="@(value => character.Constitution = value)" />
+            <AbilityInput 
+            Label="Intelligence" Score="@character.Intelligence" Modifier="@character.IntelligenceModifier" ScoreChanged="@(value => character.Intelligence = value)" />
+            <AbilityInput 
+            Label="Wisdom" Score="@character.Wisdom" Modifier="@character.WisdomModifier" ScoreChanged="@(value => character.Wisdom = value)" />
+            <AbilityInput 
+            Label="Charisma" Score="@character.Charisma" Modifier="@character.CharismaModifier" ScoreChanged="@(value => character.Charisma = value)" />
         </div>
 
         <!-- Save Button -->
@@ -32,43 +52,75 @@ else
 }
 
 @code {
-    // The character will either be loaded from a JSON file or initialized with empty values.
-    private Character character;
+    // List of available character names populated from the API.
+    private List<string> availableCharacterNames = new List<string>();
+
+    // Holds the currently selected character name from the dropdown.
+    private string selectedCharacter = "";
+
+    // The current character being edited.
+    private Character? character;
 
     protected override async Task OnInitializedAsync()
     {
-        // Check if a saved JSON file exists
-        if (File.Exists("character.json"))
-        {
-            try
-            {
-                var json = await File.ReadAllTextAsync("character.json");
-                // Attempt to deserialize the JSON into a Character object
-                character = JsonSerializer.Deserialize<Character>(json);
-            }
-            catch (Exception)
-            {
-                // If there's an error during deserialization, fallback to an empty character.
-                character = null;
-            }
-        }
+        // Retrieve available character names from the API.
+        availableCharacterNames = await _characterService.GetAvailableCharactersAsync();
+    }
 
-        // If no saved character was found or deserialization failed, initialize a new, empty character.
-        if (character == null)
+    // Called when the selection in the dropdown changes.
+    private async Task OnCharacterChanged(ChangeEventArgs e)
+    {
+        selectedCharacter = e.Value?.ToString() ?? "";
+        await LoadCharacter();
+    }
+
+    private async Task LoadCharacter()
+    {
+        if (!string.IsNullOrWhiteSpace(selectedCharacter))
         {
-            character = new();
+            // Load the selected character from the API.
+            character = await _characterService.GetCharacterAsync(selectedCharacter);
+        }
+        else
+        {
+            // If "-- New Character --" is selected, initialize a new character.
+            character = new Character
+                {
+                    Name = "",
+                    CharacterClass = "",
+                    Species = "",
+                    Level = 0,
+                    Strength = 0,
+                    Dexterity = 0,
+                    Constitution = 0,
+                    Intelligence = 0,
+                    Wisdom = 0,
+                    Charisma = 0
+                };
         }
     }
 
     private async Task SaveCharacter(MouseEventArgs e)
     {
-        // Create JSON options for better readability (optional)
-        var options = new JsonSerializerOptions { WriteIndented = true };
-        // Serialize the character object to a JSON string
-        var json = JsonSerializer.Serialize(character, options);
+        if (character != null)
+        {
+            if (string.IsNullOrEmpty(character.Name))
+            {
+                return;
+            }
 
-        // Save the JSON string to a file on the server (adjust the file path as necessary)
-        await File.WriteAllTextAsync("character.json", json);
+            var saved = await _characterService.SaveCharacterAsync(character);
+            if (saved != null)
+            {
+                character = saved;
+
+                // Refresh the available character names list.
+                availableCharacterNames = await _characterService.GetAvailableCharactersAsync();
+
+                // Optionally update the selected character to match the saved character.
+                selectedCharacter = character.Name;
+            }
+        }
     }
 
     // Compute the attribute modifier using the standard D&D formula.
