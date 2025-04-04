@@ -1,7 +1,5 @@
-﻿using System.Text.Json;
-using CharacterCreator.ClassLibrary.Main;
-using CharacterCreator.ClassLibrary.Main.CharacterClasses;
-using Newtonsoft.Json;
+﻿using CharacterCreator.ClassLibrary.Utilities.JsonConverters;
+using System.Text.Json;
 
 
 namespace CharacterCreator.Backend.Endpoints.Character;
@@ -12,40 +10,29 @@ public static class CharacterEndpoints
 
     public static void AddCharacterEndpoints(this WebApplication app)
     {
-        // Define the data folder and file path
-        //var dataFolder = Path.Combine(AppContext.BaseDirectory, "Data");
-        //if (!Directory.Exists(dataFolder))
+        //JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings()
         //{
-        //    Directory.CreateDirectory(dataFolder);
-        //}
+        //    Formatting = Formatting.Indented,
+        //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //};
 
         // GET endpoint: returns a Character instance if it exists, otherwise 404.
         app.MapGet("/character", async (string characterName) =>
         {
-            var _jsonSerializerSettings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                Formatting = Formatting.Indented
-            };
-
             var filePath = Path.Combine(DataFolder, $"{characterName}.json");
 
             if (File.Exists(filePath))
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var character = JsonConvert.DeserializeObject<Character<Fighter>>(json, _jsonSerializerSettings);
-                //var characterBase = JsonConvert.DeserializeObject<CharacterBase>(json, _jsonSerializerSettings);
+                var character = JsonSerializer.Deserialize<ClassLibrary.Main.Character>(json);
 
-                var jsonCharacter = JsonConvert.SerializeObject(character, _jsonSerializerSettings);
-
-                // Return the JSON content with a 200 OK
                 return Results.Ok(character);
             }
-            // If the file does not exist, return a 404 Not Found response
             return Results.NotFound("No character data found");
         })
         .WithName("GetCharacterData")
         .WithOpenApi();
+
 
         // GET endpoint: returns all Characters from data store.
         app.MapGet("/characters", async () =>
@@ -74,28 +61,57 @@ public static class CharacterEndpoints
         //.WithOpenApi();
 
         // POST endpoint to save the character data
-        app.MapPost("/character/Fighter", async (Character<Fighter> character) =>
+        app.MapPost("/character", async (ClassLibrary.Main.Character character) =>
         {
-            await HandlePostCharacterAsync(character);
+            //await HandlePostCharacterAsync(character);
+
+            // Read the request body as a string.
+            //using var reader = new StreamReader(request.Body);
+            //string json = await reader.ReadToEndAsync();
+
+            // Use Newtonsoft.Json with your custom settings to deserialize.
+            //var character = JsonSerializer.Deserialize<ClassLibrary.Main.Character>(json);
+
+            var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(character, options);
+
+            await File.WriteAllTextAsync(filePath, json);
+
             return Results.Created();
         })
         .WithName("PostCharacterData")
         .WithOpenApi();
+
+        //app.MapPost("/character", async (HttpRequest request) =>
+        //{
+        //    //await HandlePostCharacterAsync(character);
+
+        //    // Read the request body as a string.
+        //    using var reader = new StreamReader(request.Body);
+        //    string json = await reader.ReadToEndAsync();
+
+        //    // Use Newtonsoft.Json with your custom settings to deserialize.
+        //    var character = JsonSerializer.Deserialize<ClassLibrary.Main.Character>(json);
+
+        //    var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
+
+        //    await File.WriteAllTextAsync(filePath, json);
+
+        //    return Results.Created();
+        //})
+        //.WithName("PostCharacterData")
+        //.WithOpenApi();
     }
 
-    private static async Task HandlePostCharacterAsync<T>(Character<T> character) where T : ICharacterClass, new()
+    private static async Task HandlePostCharacterAsync(ClassLibrary.Main.Character character)
     {
-        var _jsonSerializerSettings = new JsonSerializerSettings()
-        {
-            TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented
-        };
+        //var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
 
-        var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
+        //var options = new JsonSerializerOptions { WriteIndented = true };
+        //var json = JsonConvert.SerializeObject(character, _jsonSerializerSettings);
 
-        var options = new JsonSerializerOptions { WriteIndented = true };
-        var json = JsonConvert.SerializeObject(character, _jsonSerializerSettings);
-
-        await File.WriteAllTextAsync(filePath, json);
+        //await File.WriteAllTextAsync(filePath, json);
     }
 }

@@ -1,4 +1,5 @@
 using CharacterCreator.Backend.Endpoints.Character;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 

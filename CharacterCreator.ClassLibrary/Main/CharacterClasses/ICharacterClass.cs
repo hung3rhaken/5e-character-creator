@@ -2,10 +2,18 @@
 
 public interface ICharacterClass
 {
-    string Name { get; }
+    abstract string Name { get; }
+    abstract int ClassLevel { get; set; }
 
     /// <summary>
-    /// Applies default ability values (and other defaults) to the given character.
+    /// Applies class benefits to the character.
     /// </summary>
-    void ApplyDefaults<T>(Character<T> character) where T : ICharacterClass, new();
+    /// <param name="character"></param>
+    void ApplyClassBenefits(Character character);
+
+    /// <summary>
+    /// Applies default class ability scores to the character
+    /// </summary>
+    /// <param name="character"></param>
+    void ApplyDefaultAbilityValues(Character character);
 }

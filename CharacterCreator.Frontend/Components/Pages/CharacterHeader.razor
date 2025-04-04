@@ -1,4 +1,5 @@
 ﻿@using CharacterCreator.ClassLibrary.Main
+@using CharacterCreator.ClassLibrary.Main.CharacterClasses
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
 
@@ -21,7 +22,12 @@
                 </div>
                 <div class="form-group">
                     <label>Class:</label>
-                    <InputText class="form-control" @bind-Value="Character.CharacterClassName" />
+                    <select value="@Character.CharacterClass?.Name" @onchange="OnCharacterClassChanged" class="form-control d-inline-block" style="max-width: 300px;">                        
+                        @foreach (var characterClass in characterClasses)
+                        {
+                            <option value="@characterClass">@characterClass</option>
+                        }
+                    </select>
                 </div>
             </div>
             <!-- Column 2: Subclass, Background, Alignment -->
@@ -108,5 +114,40 @@
 
 @code {
     [Parameter]
-    public CharacterBase Character { get; set; }
+    public Character Character { get; set; }
+
+    [Parameter]
+    public EventCallback CharacterHeaderChanged { get; set; }
+
+    public List<string> characterClasses = new()
+    {
+       // "Barbarian",
+       // "Bard",
+       // "Cleric",
+       // "Druid",
+       "Fighter",
+       // "Monk",
+       // "Paladin",
+       // "Ranger",
+       // "Rogue",
+       // "Sorcerer",
+       // "Warlock",
+       "Wizard"
+    };
+
+    public async Task OnCharacterClassChanged(ChangeEventArgs e)
+    {
+        CharacterClass characterClass;
+        var selectedClass = e.Value.ToString();
+
+        characterClass = selectedClass switch
+        {
+            "Fighter" => new Fighter(),
+            "Wizard" => new Wizard(),
+            _ => new Fighter()
+        };
+
+        Character.CharacterClass = characterClass;
+        await CharacterHeaderChanged.InvokeAsync();
+    }
 }

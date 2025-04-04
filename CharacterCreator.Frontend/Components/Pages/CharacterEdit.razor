@@ -31,7 +31,7 @@ else
     <div class="dnd-character-sheet">
 
         <!-- Header Component -->
-        <CharacterHeader Character="character" />
+        <CharacterHeader Character="@character" CharacterHeaderChanged="@OnCharacterHeaderChanged" />
 
         <!-- Abilities Row -->
         <div class="abilities-row">
@@ -57,7 +57,7 @@ else
     private string selectedCharacter = "";
 
     // The current character being edited.
-    private CharacterBase? character;
+    private Character? character;
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,6 +72,12 @@ else
         await LoadCharacter();
     }
 
+    private async Task OnCharacterHeaderChanged()
+    {
+        // character = newCharacter;
+        character.CalculateCharacterValues();
+    }
+
     private async Task LoadCharacter()
     {
         if (!string.IsNullOrWhiteSpace(selectedCharacter))
@@ -82,7 +88,7 @@ else
         else
         {
             // If "-- New Character --" is selected, initialize a new character.
-            character = new Character<Fighter>();
+            character = new Character();
         }
     }
 
@@ -107,11 +113,5 @@ else
                 selectedCharacter = character.Name;
             }
         }
-    }
-
-    // Compute the attribute modifier using the standard D&D formula.
-    private int GetModifier(int score)
-    {
-        return (int)Math.Floor((score - 10) / 2.0);
     }
 }
