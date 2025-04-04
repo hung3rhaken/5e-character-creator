@@ -49,13 +49,6 @@ public class Character
 
     // Control and metadata properties
 
-    /// <summary>
-    /// Default Character is created as a level 1 Fighter
-    /// </summary>
-    public Character() : this(new Fighter(1))
-    {
-    }
-
     public Character(CharacterClass characterClass)
     {
         Name = "New Guy";

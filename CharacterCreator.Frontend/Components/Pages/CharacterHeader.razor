@@ -43,7 +43,13 @@
                 </div>
                 <div class="form-group">
                     <label>Alignment:</label>
-                    <InputText type="text" class="form-control" @bind-Value="Character.Alignment" />
+                    @* <InputText type="text" class="form-control" @bind-Value="Character.Alignment" /> *@
+                    <select @bind="Character.Alignment" class="form-control">
+                        @foreach (var alignment in Alignments)
+                        {
+                            <option value="@alignment">@alignment</option>
+                        }
+                    </select>
                 </div>
             </div>
             <!-- Column 3: Size, Speed -->
@@ -121,6 +127,7 @@
     public EventCallback CharacterHeaderChanged { get; set; }
 
     private CharacterClassType selectedClassType;
+    private List<string> Alignments;
 
     protected override void OnInitialized()
     {
@@ -132,6 +139,8 @@
         {
             selectedClassType = CharacterClassType.Fighter;
         }
+
+        Alignments = AlignmentType.GetAllAlignments();
     }
 
     public async Task OnCharacterClassChanged(ChangeEventArgs e)
