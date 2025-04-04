@@ -1,4 +1,4 @@
-﻿namespace CharacterCreator.ClassLibrary.Main;
+﻿namespace CharacterCreator.ClassLibrary.Main.CharacterData;
 
 public class Ability
 {

@@ -1,4 +1,4 @@
-﻿using CharacterCreator.ClassLibrary.Main;
+﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
 using System.Text;
 using System.Text.Json;
 

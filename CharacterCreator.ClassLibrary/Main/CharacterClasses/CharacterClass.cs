@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+using System.Text.Json.Serialization;
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 

@@ -19,7 +19,7 @@ public static class CharacterEndpoints
             if (File.Exists(filePath))
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                var character = JsonSerializer.Deserialize<ClassLibrary.Main.Character>(json, jsonSerializerOptions);
+                var character = JsonSerializer.Deserialize<ClassLibrary.Main.CharacterData.Character>(json, jsonSerializerOptions);
 
                 return Results.Ok(character);
             }
@@ -44,7 +44,7 @@ public static class CharacterEndpoints
         .WithOpenApi();
 
         // POST endpoint to save the character data
-        app.MapPost("/character", async (ClassLibrary.Main.Character character) =>
+        app.MapPost("/character", async (ClassLibrary.Main.CharacterData.Character character) =>
         {
             var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
 

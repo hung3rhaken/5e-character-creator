@@ -1,4 +1,6 @@
-﻿namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
+﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+
+namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 
 public class Wizard : CharacterClass
 {

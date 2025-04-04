@@ -2,17 +2,17 @@
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 
-public class Fighter : CharacterClass
+public class Barbarian : CharacterClass
 {
-    public override string Name { get; set; } = "Fighter";
+    public override string Name { get; set; } = "Barbarian";
     public override int ClassLevel {  get; set; }
 
-    public Fighter()
+    public Barbarian()
     {
         
     }
 
-    public Fighter(int classLevel = 1)
+    public Barbarian(int classLevel = 1)
     {
         ClassLevel = classLevel;
     }
