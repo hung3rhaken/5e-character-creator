@@ -77,12 +77,6 @@ else
         await LoadCharacter();
     }
 
-    private async Task OnCharacterHeaderChanged()
-    {
-        // character = newCharacter;
-        character.CalculateCharacterValues();
-    }
-
     private async Task LoadCharacter()
     {
         if (!string.IsNullOrWhiteSpace(selectedCharacter))

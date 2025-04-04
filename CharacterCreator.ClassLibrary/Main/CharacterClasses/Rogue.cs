@@ -6,7 +6,12 @@ public class Rogue : CharacterClass
 {
     public override string Name { get; set; } = "Rogue";
 
-    public Rogue(int classLevel = 1) : base(classLevel) { }
+    protected override int HitDieValue => 8;
+
+    public Rogue(int classLevel = 1) : base(classLevel)
+    {
+        HitDice = new(HitDieValue, classLevel);
+    }
 
     public override void ApplyClassBenefits(Character character)
     {

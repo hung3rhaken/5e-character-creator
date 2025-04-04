@@ -39,6 +39,8 @@ public static class CharacterCreateAndUpdateService
     {
         character.Level = characterLevel;
         character.CharacterClass.ClassLevel = characterLevel;
+
+        UpdateCharacterValues(character);
     }
 
     public static CharacterClass GetCharacterClassInstance(CharacterClassType type, int classLevel = 1)
@@ -56,9 +58,17 @@ public static class CharacterCreateAndUpdateService
     {
         if (character.IsNewCharater)
         {
-            character.CharacterClass.ApplyDefaultAbilityValues(character);
+            if (character.IsInitialAbilityAllocation)
+            {
+                character.CharacterClass.ApplyDefaultAbilityValues(character);
+            }            
         }
 
-        ValueCalculator.CalculateArmorClass(character);
+        character.CalculateArmorClass();
+        character.CalculateMaxHitDice();
+        character.CalculateMaxHitPoints();
+        character.CalculateInititative();
+        character.CalculatePassivePerception();
+        character.CalculateProficiencyBonus();
     }
 }

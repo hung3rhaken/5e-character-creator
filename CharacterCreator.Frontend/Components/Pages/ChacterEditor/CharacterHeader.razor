@@ -35,7 +35,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Subclass:</label>
-                    <InputText type="text" class="form-control" @bind-Value="Character.SubClass" />
+                    <InputText type="text" class="form-control" @bind-Value="Character.CharacterClass.SubClass" />
                 </div>
                 <div class="form-group">
                     <label>Background:</label>
@@ -73,7 +73,6 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Level:</label>
-                    @* <InputNumber class="form-control" @bind-Value="Character.Level" /> *@
                     <InputNumber class="form-control" 
                     TValue="int" Value="Character.Level" 
                     ValueExpression="() => Character.Level" 
@@ -81,41 +80,37 @@
                 </div>
                 <div class="form-group">
                     <label>Armor Class (AC):</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.ArmorClass" />
+                    <input type="text" class="form-control" value="@Character.ArmorClass" readonly/>
                 </div>
                 <div class="form-group">
                     <label>Max Hit Points:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.MaxHitPoints" />
+                    <input type="text" class="form-control" value="@Character.MaxHitPoints" readonly />
                 </div>
             </div>
             <!-- Column 2: Current Hit Points, Hit Die, Max Hit Die -->
             <div class="col-md-4">
                 <div class="form-group">
-                    <label>Current Hit Points:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.CurrentHitPoints" />
-                </div>
-                <div class="form-group">
                     <label>Hit Die:</label>
-                    <InputText type="text" class="form-control" @bind-Value="Character.HitDice" />
+                    <input type="text" class="form-control" value="@Character.CharacterClass.HitDice" readonly/>
                 </div>
                 <div class="form-group">
                     <label>Max Hit Die:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.MaxHitDice" />
+                    <input type="number" class="form-control" value="@Character.CharacterClass.HitDice.MaxAmount" readonly/>
                 </div>
             </div>
             <!-- Column 3: Initiative, Passive Perception, Proficiency Bonus -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Initiative:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.Initiative" />
+                    <input type="text" class="form-control" value="@Character.Initiative" readonly />
                 </div>
                 <div class="form-group">
                     <label>Passive Perception:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.PassivePerception" />
+                    <input type="text" class="form-control" value="@Character.PassivePerception" readonly />
                 </div>
                 <div class="form-group">
                     <label>Proficiency Bonus:</label>
-                    <InputNumber type="text" class="form-control" @bind-Value="Character.ProficiencyBonus" />
+                    <input type="text" class="form-control" value="@Character.ProficiencyBonus" readonly />
                 </div>
             </div>
         </div>
@@ -150,12 +145,15 @@
     {
         if (Enum.TryParse<CharacterClassType>(e.Value.ToString(), out var selectedType))
         {
-            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(selectedType);
+            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(selectedType, Character.Level);
         }
         else
         {
-            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(CharacterClassType.Fighter);
+            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(CharacterClassType.Fighter, Character.Level);
         }
+
+        if (Character.IsNewCharater)
+            Character.IsInitialAbilityAllocation = true;
 
         await CharacterHeaderChanged.InvokeAsync();
     }

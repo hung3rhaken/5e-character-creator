@@ -1,4 +1,5 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+using CharacterCreator.ClassLibrary.Main.Properties;
 using System.Text.Json.Serialization;
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
@@ -19,10 +20,15 @@ public abstract class CharacterClass
 {
     public virtual string Name { get; set; } = "DefaultClass";
     public virtual int ClassLevel { get; set; }
+    public virtual string SubClass { get; set; } = string.Empty;
+    public virtual HitDice HitDice { get; set; }
+
+    protected abstract int HitDieValue { get; }
 
     protected CharacterClass(int classLevel = 1)
     {
         ClassLevel = classLevel;
+        HitDice = new HitDice(10, classLevel);
     }
 
     /// <summary>

@@ -18,6 +18,7 @@
 
     private async Task UpdateScore(Ability ability, int newScore)
     {
+        Character.IsInitialAbilityAllocation = false;
         ability.Score = newScore;
         await AbilitiesChanged.InvokeAsync();
     }

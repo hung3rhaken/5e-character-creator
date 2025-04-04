@@ -6,7 +6,12 @@ public class Warlock : CharacterClass
 {
     public override string Name { get; set; } = "Warlock";
 
-    public Warlock(int classLevel = 1) : base(classLevel) { }
+    protected override int HitDieValue => 8;
+
+    public Warlock(int classLevel = 1) : base(classLevel) 
+    { 
+        HitDice = new(HitDieValue, classLevel); 
+    }
 
     public override void ApplyClassBenefits(Character character)
     {

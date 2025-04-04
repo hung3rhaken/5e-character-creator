@@ -6,7 +6,12 @@ public class Druid : CharacterClass
 {
     public override string Name { get; set; } = "Druid";
 
-    public Druid(int classLevel = 1) : base(classLevel) { }
+    protected override int HitDieValue => 8;
+
+    public Druid(int classLevel = 1) : base(classLevel) 
+    { 
+        HitDice = new(HitDieValue, classLevel);
+    }
 
     public override void ApplyClassBenefits(Character character)
     {

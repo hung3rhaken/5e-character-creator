@@ -6,7 +6,12 @@ public class Ranger : CharacterClass
 {
     public override string Name { get; set; } = "Ranger";
 
-    public Ranger(int classLevel = 1) : base(classLevel) { }
+    protected override int HitDieValue => 10;
+
+    public Ranger(int classLevel = 1) : base(classLevel)
+    {
+        HitDice = new(HitDieValue, classLevel);
+    }
 
     public override void ApplyClassBenefits(Character character)
     {

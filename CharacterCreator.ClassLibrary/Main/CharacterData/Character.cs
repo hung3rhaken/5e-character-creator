@@ -1,5 +1,7 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterClasses;
+using CharacterCreator.ClassLibrary.Main.Properties;
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterData;
 
@@ -9,7 +11,6 @@ public class Character
     public string Name { get; set; }
     public int Level { get; set; }
     public CharacterClass CharacterClass { get; set; }
-    public string SubClass { get; set; }
     // Multiclassing somewhere here
 
     // Origin
@@ -24,8 +25,6 @@ public class Character
     public int ArmorClass { get; set; }
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
-    public string HitDice { get; set; }
-    public int MaxHitDice { get; set; } //Todo: HitDice and Max can be consolidated into singular Dict. etc.
     public int Initiative { get; set; }
     public int PassivePerception { get; set; }
 
@@ -51,12 +50,14 @@ public class Character
     // Control and metadata properties
     public bool IsNewCharater { get; set; }
 
+    [JsonIgnore]
+    public bool IsInitialAbilityAllocation { get; set; }
+
     public Character(CharacterClass characterClass)
     {
         Name = "New Guy";
         Level = 1;
         CharacterClass = characterClass;
-        SubClass = string.Empty;
 
         Background = "Artisan";
         Species = "Human";
@@ -68,12 +69,11 @@ public class Character
         ArmorClass = 13;
         MaxHitPoints = 10;
         CurrentHitPoints = MaxHitPoints;
-        HitDice = "D10";
-        MaxHitDice = 2;
         Initiative = 2;
         PassivePerception = 12;
 
         IsNewCharater = true;
+        IsInitialAbilityAllocation = true;
     }
 
     public void CalculateCharacterValues()
