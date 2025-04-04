@@ -43,7 +43,6 @@
                 </div>
                 <div class="form-group">
                     <label>Alignment:</label>
-                    @* <InputText type="text" class="form-control" @bind-Value="Character.Alignment" /> *@
                     <select @bind="Character.Alignment" class="form-control">
                         @foreach (var alignment in Alignments)
                         {
@@ -74,7 +73,11 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Level:</label>
-                    <InputNumber class="form-control" @bind-Value="Character.Level" />
+                    @* <InputNumber class="form-control" @bind-Value="Character.Level" /> *@
+                    <InputNumber class="form-control" 
+                        TValue="int" Value="Character.Level" 
+                        ValueExpression="() => Character.Level" 
+                        ValueChanged="(value) => OnLevelChanged(value)"/>
                 </div>
                 <div class="form-group">
                     <label>Armor Class (AC):</label>
@@ -155,5 +158,11 @@
         }
 
         await CharacterHeaderChanged.InvokeAsync();
+    }
+
+    private void OnLevelChanged(int newLevel)
+    {
+        Character.Level = newLevel;
+        Character.CharacterClass.ClassLevel = newLevel;
     }
 }
