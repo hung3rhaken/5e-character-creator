@@ -34,17 +34,11 @@ else
     <div class="dnd-character-sheet">
 
         <!-- Header Component -->
-        <CharacterHeader Character="@character" CharacterHeaderChanged="@OnCharacterHeaderChanged" />
+        <CharacterHeader Character="@character" CharacterHeaderChanged="@OnCharacterUpdated" />
 
-        <!-- Abilities Row -->
-        <div class="abilities-row">
-            <AbilityInput Ability="@character.Strength" ScoreChanged="@(value => character.Strength.Score = value)" />
-            <AbilityInput Ability="@character.Dexterity" ScoreChanged="@(value => character.Dexterity.Score = value)" />
-            <AbilityInput Ability="@character.Constitution" ScoreChanged="@(value => character.Constitution.Score = value)" />
-            <AbilityInput Ability="@character.Intelligence" ScoreChanged="@(value => character.Intelligence.Score = value)" />
-            <AbilityInput Ability="@character.Wisdom" ScoreChanged="@(value => character.Wisdom.Score = value)" />
-            <AbilityInput Ability="@character.Charisma" ScoreChanged="@(value => character.Charisma.Score = value)" />
-        </div>
+        <!-- Abilities Row -->        
+        <AbilityInputWrapper Character="character" AbilitiesChanged="@OnCharacterUpdated" />
+
     </div>
 
     <div class="save-container text-center mt-3">
@@ -66,6 +60,14 @@ else
     {
         // Retrieve available character names from the API.
         availableCharacterNames = await _characterService.GetAvailableCharactersAsync();
+    }
+
+    private async Task OnCharacterUpdated()
+    {
+        if (character is null)
+            return;
+
+        CharacterCreateAndUpdateService.UpdateCharacterValues(character);
     }
 
     // Called when the selection in the dropdown changes.
@@ -109,6 +111,7 @@ else
                 return;
             }
 
+            character.IsNewCharater = false;
             var saved = await _characterService.SaveCharacterAsync(character);
             if (saved != null)
             {

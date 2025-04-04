@@ -75,9 +75,9 @@
                     <label>Level:</label>
                     @* <InputNumber class="form-control" @bind-Value="Character.Level" /> *@
                     <InputNumber class="form-control" 
-                        TValue="int" Value="Character.Level" 
-                        ValueExpression="() => Character.Level" 
-                        ValueChanged="(value) => OnLevelChanged(value)"/>
+                    TValue="int" Value="Character.Level" 
+                    ValueExpression="() => Character.Level" 
+                    ValueChanged="(value) => OnLevelChanged(value)"/>
                 </div>
                 <div class="form-group">
                     <label>Armor Class (AC):</label>
@@ -162,7 +162,6 @@
 
     private void OnLevelChanged(int newLevel)
     {
-        Character.Level = newLevel;
-        Character.CharacterClass.ClassLevel = newLevel;
+        CharacterCreateAndUpdateService.CharacterLevelUp(Character, newLevel);
     }
 }

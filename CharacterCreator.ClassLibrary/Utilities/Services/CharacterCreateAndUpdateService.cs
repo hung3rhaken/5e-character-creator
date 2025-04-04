@@ -24,10 +24,15 @@ public static class CharacterCreateAndUpdateService
     public static Character CreateNewCharacter(CharacterClassType characterClassType, int characterLevel = 1)
     {
         var characterClass = GetCharacterClassInstance(characterClassType);
-        return new Character(characterClass)
+        
+        var character = new Character(characterClass)
         {
             Level = characterLevel
         };
+
+        UpdateCharacterValues(character);
+
+        return character;
     }
 
     public static void CharacterLevelUp(Character character, int characterLevel)
@@ -47,4 +52,13 @@ public static class CharacterCreateAndUpdateService
         throw new ArgumentException($"Invalid character class type: {type}");
     }
 
+    public static void UpdateCharacterValues(Character character)
+    {
+        if (character.IsNewCharater)
+        {
+            character.CharacterClass.ApplyDefaultAbilityValues(character);
+        }
+
+        ValueCalculator.CalculateArmorClass(character);
+    }
 }

@@ -36,4 +36,13 @@ public abstract class CharacterClass
     /// </summary>
     /// <param name="character"></param>
     public abstract void ApplyDefaultAbilityValues(Character character);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public virtual int ArmorClassBonus(Character character)
+    {
+        return 0;
+    }
 }

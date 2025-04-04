@@ -1,0 +1,43 @@
+﻿/*.ability {
+    display: flex;
+    flex-direction: column;
+    align-items: center;*/ /* Center everything horizontally */
+    /*margin: 8px;
+}
+
+.ability-label {
+    width: 100%;
+    text-align: center;*/ /* Center the label text */
+    /*margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.score-with-mod {
+    display: flex;
+    width: 110%;
+}
+
+.score-wrapper,
+.modifier-wrapper {
+    flex: 1;*/ /* Each takes up equal space */
+    /*display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ability-score {
+    width: 100%;
+    max-width: 60px;*/ /* Adjust as needed */
+/*}
+
+.modifier-display {
+    font-size: 1.5rem;*/ /* Larger font size */
+    /*font-weight: bold;
+}*/
+
+.abilities-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+}

@@ -21,10 +21,3 @@
     .header-row label {
         font-weight: bold;
     }
-
-.abilities-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 20px;
-}

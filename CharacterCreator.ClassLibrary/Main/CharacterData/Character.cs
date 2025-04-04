@@ -1,4 +1,5 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterClasses;
+using System.Numerics;
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterData;
 
@@ -48,6 +49,7 @@ public class Character
     // Spellcasting
 
     // Control and metadata properties
+    public bool IsNewCharater { get; set; }
 
     public Character(CharacterClass characterClass)
     {
@@ -70,8 +72,8 @@ public class Character
         MaxHitDice = 2;
         Initiative = 2;
         PassivePerception = 12;
-                
-        CalculateInitialCharacterValues();
+
+        IsNewCharater = true;
     }
 
     public void CalculateCharacterValues()
