@@ -1,6 +1,7 @@
 ﻿@page "/character"
 @using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Utilities.Services
 
 <h1>Character Sheet</h1>
 
@@ -34,6 +35,6 @@ else
     protected override void OnInitialized()
     {
         // Create a dummy character with hardcoded values
-        character = new Character();
+        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
     }
 }

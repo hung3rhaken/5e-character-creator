@@ -1,5 +1,6 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Utilities.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
 
@@ -22,8 +23,8 @@
                 </div>
                 <div class="form-group">
                     <label>Class:</label>
-                    <select value="@Character.CharacterClass?.Name" @onchange="OnCharacterClassChanged" class="form-control d-inline-block" style="max-width: 300px;">                        
-                        @foreach (var characterClass in characterClasses)
+                    <select value="@selectedClassType" @onchange="OnCharacterClassChanged" class="form-control d-inline-block" style="max-width: 300px;">                        
+                        @foreach (var characterClass in Enum.GetValues(typeof(CharacterClassType)))
                         {
                             <option value="@characterClass">@characterClass</option>
                         }
@@ -34,26 +35,26 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Subclass:</label>
-                    <input type="text" class="form-control" value="Arcane Tradition" readonly />
+                    <InputText type="text" class="form-control" @bind-Value="Character.SubClass" />
                 </div>
                 <div class="form-group">
                     <label>Background:</label>
-                    <input type="text" class="form-control" value="Sage" readonly />
+                    <InputText type="text" class="form-control" @bind-Value="Character.Background" />
                 </div>
                 <div class="form-group">
                     <label>Alignment:</label>
-                    <input type="text" class="form-control" value="Neutral Good" readonly />
+                    <InputText type="text" class="form-control" @bind-Value="Character.Alignment" />
                 </div>
             </div>
             <!-- Column 3: Size, Speed -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Size:</label>
-                    <input type="text" class="form-control" value="Medium" readonly />
+                    <InputText type="text" class="form-control" @bind-Value="Character.Size" />
                 </div>
                 <div class="form-group">
                     <label>Speed:</label>
-                    <input type="number" class="form-control" value="30" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.Speed" />
                 </div>
             </div>
         </div>
@@ -71,41 +72,41 @@
                 </div>
                 <div class="form-group">
                     <label>Armor Class (AC):</label>
-                    <input type="number" class="form-control" value="15" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.ArmorClass" />
                 </div>
                 <div class="form-group">
                     <label>Max Hit Points:</label>
-                    <input type="number" class="form-control" value="50" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.MaxHitPoints" />
                 </div>
             </div>
             <!-- Column 2: Current Hit Points, Hit Die, Max Hit Die -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Current Hit Points:</label>
-                    <input type="number" class="form-control" value="50" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.CurrentHitPoints" />
                 </div>
                 <div class="form-group">
                     <label>Hit Die:</label>
-                    <input type="text" class="form-control" value="d8" readonly />
+                    <InputText type="text" class="form-control" @bind-Value="Character.HitDice" />
                 </div>
                 <div class="form-group">
                     <label>Max Hit Die:</label>
-                    <input type="number" class="form-control" value="4" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.MaxHitDice" />
                 </div>
             </div>
             <!-- Column 3: Initiative, Passive Perception, Proficiency Bonus -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Initiative:</label>
-                    <input type="number" class="form-control" value="2" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.Initiative" />
                 </div>
                 <div class="form-group">
                     <label>Passive Perception:</label>
-                    <input type="number" class="form-control" value="12" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.PassivePerception" />
                 </div>
                 <div class="form-group">
                     <label>Proficiency Bonus:</label>
-                    <input type="number" class="form-control" value="2" readonly />
+                    <InputNumber type="text" class="form-control" @bind-Value="Character.ProficiencyBonus" />
                 </div>
             </div>
         </div>
@@ -119,35 +120,31 @@
     [Parameter]
     public EventCallback CharacterHeaderChanged { get; set; }
 
-    public List<string> characterClasses = new()
+    private CharacterClassType selectedClassType;
+
+    protected override void OnInitialized()
     {
-       // "Barbarian",
-       // "Bard",
-       // "Cleric",
-       // "Druid",
-       "Fighter",
-       // "Monk",
-       // "Paladin",
-       // "Ranger",
-       // "Rogue",
-       // "Sorcerer",
-       // "Warlock",
-       "Wizard"
-    };
+        if (Enum.TryParse<CharacterClassType>(Character.CharacterClass.Name, out var type))
+        {
+            selectedClassType = type;
+        }
+        else
+        {
+            selectedClassType = CharacterClassType.Fighter;
+        }
+    }
 
     public async Task OnCharacterClassChanged(ChangeEventArgs e)
     {
-        CharacterClass characterClass;
-        var selectedClass = e.Value.ToString();
-
-        characterClass = selectedClass switch
+        if (Enum.TryParse<CharacterClassType>(e.Value.ToString(), out var selectedType))
         {
-            "Fighter" => new Fighter(),
-            "Wizard" => new Wizard(),
-            _ => new Fighter()
-        };
+            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(selectedType);
+        }
+        else
+        {
+            Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(CharacterClassType.Fighter);
+        }
 
-        Character.CharacterClass = characterClass;
         await CharacterHeaderChanged.InvokeAsync();
     }
 }

@@ -2,11 +2,11 @@
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 
-public class Barbarian : CharacterClass
+public class Monk : CharacterClass
 {
-    public override string Name { get; set; } = "Barbarian";
+    public override string Name { get; set; } = "Monk";
 
-    public Barbarian(int classLevel = 1) : base(classLevel) { }
+    public Monk(int classLevel = 1) : base(classLevel) { }
 
     public override void ApplyClassBenefits(Character character)
     {
@@ -15,11 +15,11 @@ public class Barbarian : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength = new Ability("Strength", 15);
-        character.Dexterity = new Ability("Dexterity", 13);
-        character.Constitution = new Ability("Constitution", 14);
+        character.Strength = new Ability("Strength", 12);
+        character.Dexterity = new Ability("Dexterity", 15);
+        character.Constitution = new Ability("Constitution", 13);
         character.Intelligence = new Ability("Intelligence", 10);
-        character.Wisdom = new Ability("Wisdom", 12);
+        character.Wisdom = new Ability("Wisdom", 14);
         character.Charisma = new Ability("Charisma", 8);
     }
 }

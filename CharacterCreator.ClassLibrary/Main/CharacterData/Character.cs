@@ -47,20 +47,37 @@ public class Character
 
     // Spellcasting
 
+    // Control and metadata properties
+
     /// <summary>
     /// Default Character is created as a level 1 Fighter
     /// </summary>
-    public Character() : this(new Fighter())
+    public Character() : this(new Fighter(1))
     {
     }
 
     public Character(CharacterClass characterClass)
     {
-        CharacterClass = characterClass;
         Name = "New Guy";
-        Species = "Human";
         Level = 1;
+        CharacterClass = characterClass;
+        SubClass = string.Empty;
 
+        Background = "Artisan";
+        Species = "Human";
+        Alignment = "Neutral Good";
+        Size = "Medium";
+        Speed = 30;
+
+        ProficiencyBonus = 2;
+        ArmorClass = 13;
+        MaxHitPoints = 10;
+        CurrentHitPoints = MaxHitPoints;
+        HitDice = "D10";
+        MaxHitDice = 2;
+        Initiative = 2;
+        PassivePerception = 12;
+                
         CalculateInitialCharacterValues();
     }
 
