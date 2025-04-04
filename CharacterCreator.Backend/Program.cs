@@ -1,16 +1,14 @@
 using CharacterCreator.Backend.Endpoints.Character;
-using Newtonsoft.Json;
+using CharacterCreator.ClassLibrary.Utilities.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Optional: Configure JSON options if needed (e.g., for indented output)
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.PropertyNameCaseInsensitive = GlobalJsonOptions.PropertyNameCaseInsensitive;
+    options.SerializerOptions.WriteIndented = GlobalJsonOptions.WriteIndented;
 });
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -4,7 +4,7 @@ namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 
 [JsonDerivedType(typeof(Fighter), "Fighter")]
 [JsonDerivedType(typeof(Wizard), "Wizard")]
-public class CharacterClass
+public abstract class CharacterClass
 {
     public virtual string Name { get; set; } = "DefaultClass";
     public virtual int ClassLevel { get; set; }

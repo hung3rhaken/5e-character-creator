@@ -1,7 +1,4 @@
 ﻿using CharacterCreator.ClassLibrary.Main;
-using CharacterCreator.ClassLibrary.Main.CharacterClasses;
-using CharacterCreator.ClassLibrary.Utilities.JsonConverters;
-//using Newtonsoft.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -19,19 +16,19 @@ public class CharacterService
         //{
         //    Formatting = Formatting.Indented,
         //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            
+
         //};
     }
 
-    public async Task<Character>? GetCharacterAsync(string characterName) 
+    public async Task<Character>? GetCharacterAsync(string characterName)
     {
         // Ensure the character name is URL encoded in case it contains spaces or special characters.
         var encodedName = Uri.EscapeDataString(characterName);
-        var response = await _httpClient.GetAsync($"character?characterName={encodedName}");       
+        var response = await _httpClient.GetAsync($"character?characterName={encodedName}");
 
         if (response.IsSuccessStatusCode)
         {
-            var options = new JsonSerializerOptions 
+            var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
                 PropertyNameCaseInsensitive = true,
