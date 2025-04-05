@@ -1,4 +1,5 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+using CharacterCreator.ClassLibrary.Utilities.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -7,17 +8,12 @@ namespace CharacterCreator.Frontend.Services;
 public class CharacterService
 {
     private readonly HttpClient _httpClient;
-    //private readonly JsonSerializerSettings _jsonSerializerSettings;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     public CharacterService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        //_jsonSerializerSettings = new JsonSerializerSettings()
-        //{
-        //    Formatting = Formatting.Indented,
-        //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-
-        //};
+        _jsonSerializerOptions = GlobalJsonOptions.SerializerOptions;
     }
 
     public async Task<Character>? GetCharacterAsync(string characterName)
@@ -28,14 +24,8 @@ public class CharacterService
 
         if (response.IsSuccessStatusCode)
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNameCaseInsensitive = true,
-            };
-
             var resultString = await response.Content.ReadAsStringAsync();
-            var character = JsonSerializer.Deserialize<Character>(resultString, options);
+            var character = JsonSerializer.Deserialize<Character>(resultString, _jsonSerializerOptions);
             return character;
         }
         return null;
@@ -44,9 +34,15 @@ public class CharacterService
     public async Task<List<string>> GetAvailableCharactersAsync()
     {
         var response = await _httpClient.GetAsync($"characters");
+        List<string> characterList = new();
 
-        var result = await _httpClient.GetFromJsonAsync<List<string>>("characters");
-        return result ?? new List<string>();
+        if (response.IsSuccessStatusCode)
+        {
+            var resultString = await response.Content.ReadAsStringAsync();
+            characterList = JsonSerializer.Deserialize<List<string>>(resultString, _jsonSerializerOptions);
+        }
+
+        return characterList;
     }
 
     public async Task<Character?> SaveCharacterAsync(Character character)
@@ -54,7 +50,7 @@ public class CharacterService
         string json = string.Empty;
         try
         {
-            json = JsonSerializer.Serialize(character);
+            json = JsonSerializer.Serialize(character, _jsonSerializerOptions);
         }
         catch (Exception e)
         {

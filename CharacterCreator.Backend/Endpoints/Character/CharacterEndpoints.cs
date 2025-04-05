@@ -32,11 +32,16 @@ public static class CharacterEndpoints
         // GET endpoint: returns all Characters from data store.
         app.MapGet("/characters", async () =>
         {
+            List<string> characterNames = new();
             var files = Directory.GetFiles(DataFolder, "*.json");
-            var characterNames = 
-                files.Select(file => 
-                    Path.GetFileNameWithoutExtension(file))
-                .ToList();
+
+            if (files is not null)
+            {
+                characterNames =
+                    files.Select(file =>
+                        Path.GetFileNameWithoutExtension(file))
+                    .ToList();
+            }
 
             return Results.Ok(characterNames);
         })
@@ -46,6 +51,11 @@ public static class CharacterEndpoints
         // POST endpoint to save the character data
         app.MapPost("/character", async (ClassLibrary.Main.CharacterData.Character character) =>
         {
+            if (!Path.Exists(DataFolder))
+            {
+                Directory.CreateDirectory(DataFolder);
+            }
+
             var filePath = Path.Combine(DataFolder, $"{character.Name}.json");
 
             var json = JsonSerializer.Serialize(character, jsonSerializerOptions);
