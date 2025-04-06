@@ -1,0 +1,24 @@
+﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
+
+<div class="skill-editor">
+    <h3>@Skill.Name</h3>
+    <p>Value: @Skill.Modifier</p>
+    <div>
+        <label>Proficiency</label>
+        <InputCheckbox type="checkbox" Value="Skill.HasProficiency" ValueChanged="ProficiencyChanged" ValueExpression="() => Skill.HasProficiency" />
+    </div>
+        <label>Expertise</label>
+    <InputCheckbox type="checkbox" Value="Skill.HasExpertise" ValueChanged="ExpertiseChanged" ValueExpression="() => Skill.HasExpertise" disabled="Skill.HasProficiency == false" />
+</div>
+
+@code {
+    [Parameter]
+    public Skill Skill { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ProficiencyChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ExpertiseChanged { get; set; }
+
+}

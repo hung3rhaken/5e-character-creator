@@ -3,45 +3,45 @@
 
 @inject CharacterService _characterService
 
-@using CharacterCreator.ClassLibrary.Main
-@using System.Text.Json
+@using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Utilities.Services
 @using CharacterCreator.Frontend.Services
+@using System.Text.Json
 
 <h3>Edit Character</h3>
 
 <div class="character-select mb-3">
     <label>Select a character:</label>
     <select value="@selectedCharacter" @onchange="OnCharacterChanged" class="form-control d-inline-block" style="max-width: 300px;">
-        <option value="">-- New Character --</option>
-        <option value="">-- New Character --</option>
+        <option value="" disabled>Choose a Character to load</option>
         @foreach (var name in availableCharacterNames)
         {
             <option value="@name">@name</option>
         }
     </select>
+    <div class="save-container text-center mt-3">
+        <button class="btn btn-primary" @onclick="NewCharacter">New Character</button>
+    </div>
 </div>
 
 @if (character == null)
 {
-    <p>No character loaded. Enter a name and click "Load" to begin.</p>
+    <p>No character loaded. Select an existing character or creat a new one.</p>
 }
 else
 {
     <div class="dnd-character-sheet">
 
         <!-- Header Component -->
-        <CharacterHeader Character="character" />
+        <CharacterHeader Character="@character" CharacterHeaderChanged="@OnCharacterUpdated" />
 
-        <!-- Abilities Row -->
-        <div class="abilities-row">
-            <AbilityInput Ability="@character.Strength" ScoreChanged="@(value => character.Strength.Score = value)" />
-            <AbilityInput Ability="@character.Dexterity" ScoreChanged="@(value => character.Dexterity.Score = value)" />
-            <AbilityInput Ability="@character.Constitution" ScoreChanged="@(value => character.Constitution.Score = value)" />
-            <AbilityInput Ability="@character.Intelligence" ScoreChanged="@(value => character.Intelligence.Score = value)" />
-            <AbilityInput Ability="@character.Wisdom" ScoreChanged="@(value => character.Wisdom.Score = value)" />
-            <AbilityInput Ability="@character.Charisma" ScoreChanged="@(value => character.Charisma.Score = value)" />
-        </div>
+        <!-- Abilities Row -->        
+        <AbilityInputWrapper Character="character" AbilitiesChanged="@OnCharacterUpdated" />
+
+        <!-- Skills -->
+        <SkillsInputWrapper Character="character" SkillsChanged="@OnCharacterUpdated" />
+
     </div>
 
     <div class="save-container text-center mt-3">
@@ -57,12 +57,20 @@ else
     private string selectedCharacter = "";
 
     // The current character being edited.
-    private CharacterBase? character;
+    private Character? character;
 
     protected override async Task OnInitializedAsync()
     {
         // Retrieve available character names from the API.
         availableCharacterNames = await _characterService.GetAvailableCharactersAsync();
+    }
+
+    private async Task OnCharacterUpdated()
+    {
+        if (character is null)
+            return;
+
+        CharacterCreateAndUpdateService.UpdateCharacterValues(character);
     }
 
     // Called when the selection in the dropdown changes.
@@ -76,15 +84,20 @@ else
     {
         if (!string.IsNullOrWhiteSpace(selectedCharacter))
         {
-            // Load the selected character from the API.
             character = await _characterService.GetCharacterAsync(selectedCharacter);
         }
         else
         {
-            // If "-- New Character --" is selected, initialize a new character.
-            character = new Character<Fighter>();
+            selectedCharacter = "";
+            character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
         }
     }
+
+    private void NewCharacter()
+    {
+        selectedCharacter = "";
+        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
+    } 
 
     private async Task SaveCharacter(MouseEventArgs e)
     {
@@ -95,6 +108,7 @@ else
                 return;
             }
 
+            character.IsNewCharater = false;
             var saved = await _characterService.SaveCharacterAsync(character);
             if (saved != null)
             {
@@ -107,11 +121,5 @@ else
                 selectedCharacter = character.Name;
             }
         }
-    }
-
-    // Compute the attribute modifier using the standard D&D formula.
-    private int GetModifier(int score)
-    {
-        return (int)Math.Floor((score - 10) / 2.0);
     }
 }

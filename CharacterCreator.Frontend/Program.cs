@@ -1,3 +1,4 @@
+using CharacterCreator.ClassLibrary.Utilities.Json;
 using CharacterCreator.Frontend.Components;
 using CharacterCreator.Frontend.Services;
 
@@ -11,6 +12,12 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped(sp => new HttpClient 
 { 
     BaseAddress = new Uri("https://localhost:7238/character")
+});
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNameCaseInsensitive = GlobalJsonOptions.PropertyNameCaseInsensitive;
+    options.SerializerOptions.WriteIndented = GlobalJsonOptions.WriteIndented;
 });
 
 // Register the CharacterService

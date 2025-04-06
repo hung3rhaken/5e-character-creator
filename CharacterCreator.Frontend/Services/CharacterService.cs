@@ -1,35 +1,31 @@
-﻿using CharacterCreator.ClassLibrary.Main;
-using CharacterCreator.ClassLibrary.Main.CharacterClasses;
-using Newtonsoft.Json;
+﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+using CharacterCreator.ClassLibrary.Utilities.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace CharacterCreator.Frontend.Services;
 
 public class CharacterService
 {
     private readonly HttpClient _httpClient;
-    private readonly JsonSerializerSettings _jsonSerializerSettings;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     public CharacterService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _jsonSerializerSettings = new JsonSerializerSettings()
-        {
-            TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented
-        };
+        _jsonSerializerOptions = GlobalJsonOptions.SerializerOptions;
     }
 
-    public async Task<CharacterBase>? GetCharacterAsync(string characterName) 
+    public async Task<Character>? GetCharacterAsync(string characterName)
     {
         // Ensure the character name is URL encoded in case it contains spaces or special characters.
         var encodedName = Uri.EscapeDataString(characterName);
-        var response = await _httpClient.GetAsync($"character?characterName={encodedName}");       
+        var response = await _httpClient.GetAsync($"character?characterName={encodedName}");
 
         if (response.IsSuccessStatusCode)
         {
             var resultString = await response.Content.ReadAsStringAsync();
-            var character = JsonConvert.DeserializeObject<CharacterBase>(resultString, _jsonSerializerSettings);
+            var character = JsonSerializer.Deserialize<Character>(resultString, _jsonSerializerOptions);
             return character;
         }
         return null;
@@ -38,28 +34,39 @@ public class CharacterService
     public async Task<List<string>> GetAvailableCharactersAsync()
     {
         var response = await _httpClient.GetAsync($"characters");
-
-        var result = await _httpClient.GetFromJsonAsync<List<string>>("characters");
-        return result ?? new List<string>();
-    }
-
-    public async Task<CharacterBase?> SaveCharacterAsync(CharacterBase character)
-    {
-        // Serialize using Newtonsoft.Json with your settings.
-        var json = JsonConvert.SerializeObject(character, _jsonSerializerSettings);
-
-        // Create an HttpContent with the JSON payload.
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        // Send the POST request.
-        var response = await _httpClient.PostAsync("character/fighter", content);
+        List<string> characterList = new();
 
         if (response.IsSuccessStatusCode)
         {
-            // Optionally, if you want to deserialize the response, you can do so.
-            // For now, we'll just return the original character.
+            var resultString = await response.Content.ReadAsStringAsync();
+            characterList = JsonSerializer.Deserialize<List<string>>(resultString, _jsonSerializerOptions);
+        }
+
+        return characterList;
+    }
+
+    public async Task<Character?> SaveCharacterAsync(Character character)
+    {
+        string json = string.Empty;
+        try
+        {
+            json = JsonSerializer.Serialize(character, _jsonSerializerOptions);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("character", content);
+
+        if (response.IsSuccessStatusCode)
+        {
             return character;
         }
-        return null;
+
+        return null; // Todo: consider more effective error handling
     }
 }

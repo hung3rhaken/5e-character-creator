@@ -2,25 +2,25 @@
 
 namespace CharacterCreator.ClassLibrary.Main.CharacterClasses;
 
-public class Fighter : CharacterClass
+public class Ranger : CharacterClass
 {
-    public override string Name { get; set; } = "Fighter";
+    public override string Name { get; set; } = "Ranger";
 
     protected override int HitDieValue => 10;
 
-    protected override int DefaultStrength => 15;
-    protected override int DefaultDexterity => 14;
+    protected override int DefaultStrength => 12;
+    protected override int DefaultDexterity => 15;
     protected override int DefaultConstitution => 13;
     protected override int DefaultIntelligence => 8;
-    protected override int DefaultWisdom => 10;
-    protected override int DefaultCharisma => 12;
+    protected override int DefaultWisdom => 14;
+    protected override int DefaultCharisma => 10;
 
-    public Fighter()
+    public Ranger()
     {
         
     }
 
-    public Fighter(int classLevel = 1) : base(classLevel)
+    public Ranger(int classLevel = 1) : base(classLevel)
     {
         HitDice = new(HitDieValue, classLevel);
     }
@@ -34,6 +34,6 @@ public class Fighter : CharacterClass
     {
         base.ApplyDefaultAbilityValues(character);
         character.Strength.HasSavingThrowProficiency = true;
-        character.Constitution.HasSavingThrowProficiency = true;
+        character.Dexterity.HasSavingThrowProficiency = true;
     }
 }
