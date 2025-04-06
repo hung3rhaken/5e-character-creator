@@ -1,5 +1,6 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Main.Properties
 @using CharacterCreator.ClassLibrary.Utilities.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
@@ -44,7 +45,7 @@
                 <div class="form-group">
                     <label>Alignment:</label>
                     <select @bind="Character.Alignment" class="form-control">
-                        @foreach (var alignment in Alignments)
+                        @foreach (var alignment in Enum.GetValues(typeof(Alignment)))
                         {
                             <option value="@alignment">@alignment</option>
                         }
@@ -55,7 +56,13 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Size:</label>
-                    <InputText type="text" class="form-control" @bind-Value="Character.Size" />
+                    @* <InputText type="text" class="form-control" @bind-Value="Character.Size" /> *@
+                    <select @bind="Character.Size" class="form-control">
+                        @foreach (var size in Enum.GetValues(typeof(Size)))
+                        {
+                            <option value="@size">@size</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Speed:</label>
@@ -126,8 +133,6 @@
 
     private CharacterClassType selectedClassType;
 
-    private List<string> Alignments;
-
     protected override void OnInitialized()
     {
         if (Enum.TryParse<CharacterClassType>(Character.CharacterClass.Name, out var type))
@@ -138,8 +143,6 @@
         {
             selectedClassType = CharacterClassType.Fighter;
         }
-
-        Alignments = AlignmentType.GetAllAlignments();
     }
 
     public async Task OnCharacterClassChanged(ChangeEventArgs e)

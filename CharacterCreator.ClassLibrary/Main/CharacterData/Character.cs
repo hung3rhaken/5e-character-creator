@@ -17,8 +17,9 @@ public class Character
     #region Origin
     public string Background { get; set; }
     public string Species { get; set; }
-    public string Alignment { get; set; }
-    public string Size { get; set; }
+    public Alignment Alignment { get; set; }
+    public Size Size { get; set; }
+    //public string Size { get; set; }
     public int Speed { get; set; }
     #endregion
 
@@ -81,7 +82,7 @@ public class Character
 
     public Character()
     {
-        
+
     }
 
     public Character(CharacterClass characterClass)
@@ -92,8 +93,8 @@ public class Character
 
         Background = "Artisan";
         Species = "Human";
-        Alignment = "Neutral Good";
-        Size = "Medium";
+        Alignment = Alignment.NeutralGood;
+        Size = Size.Medium;
         Speed = 30;
 
         InitialiseAbilities();
