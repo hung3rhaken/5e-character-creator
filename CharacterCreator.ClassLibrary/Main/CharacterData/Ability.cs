@@ -6,6 +6,11 @@ public class Ability
     public int Score { get; set; }
     public int Modifier { get => CalculateModifier(Score); }
 
+    public Ability()
+    {
+        
+    }
+
     public Ability(string name, int score)
     {
         Name = name;

@@ -1,0 +1,31 @@
+﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
+
+@rendermode InteractiveServer
+
+
+<h3>SkillsInputWrapper</h3>
+<SkillsInput 
+    Skill="Character.Stealth" 
+    ProficiencyChanged="@(value => UpdateSkillProficiency(Character.Stealth, value))"
+    ExpertiseChanged="@(value => UpdateSkillExpertise(Character.Stealth, value))">
+</SkillsInput>
+
+@code {
+    [Parameter]
+    public Character Character { get; set; }
+
+    [Parameter]
+    public EventCallback SkillsChanged { get; set; }
+
+    private async Task UpdateSkillProficiency(Skill skill, bool newValue)
+    {
+        skill.HasProficiency = newValue;
+        await SkillsChanged.InvokeAsync();
+    }
+
+    private async Task UpdateSkillExpertise(Skill skill, bool newValue)
+    {
+        skill.HasExpertise = newValue;
+        await SkillsChanged.InvokeAsync();
+    }
+}

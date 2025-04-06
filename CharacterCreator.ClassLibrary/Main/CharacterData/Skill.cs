@@ -8,6 +8,11 @@ public class Skill
     public bool HasExpertise { get; set; }
     public int Modifier { get; set; }
 
+    public Skill()
+    {
+        
+    }
+
     public Skill(string name, Ability baseAbility)
     {
         Name = name;

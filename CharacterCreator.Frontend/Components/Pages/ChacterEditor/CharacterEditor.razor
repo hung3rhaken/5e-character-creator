@@ -27,7 +27,7 @@
 
 @if (character == null)
 {
-    <p>No character loaded. Enter a name and click "Load" to begin.</p>
+    <p>No character loaded. Select an existing character or creat a new one.</p>
 }
 else
 {
@@ -38,6 +38,9 @@ else
 
         <!-- Abilities Row -->        
         <AbilityInputWrapper Character="character" AbilitiesChanged="@OnCharacterUpdated" />
+
+        <!-- Skills -->
+        <SkillsInputWrapper Character="character" SkillsChanged="@OnCharacterUpdated" />
 
     </div>
 

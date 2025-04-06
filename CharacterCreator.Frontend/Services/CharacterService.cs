@@ -67,6 +67,6 @@ public class CharacterService
             return character;
         }
 
-        return null;
+        return null; // Todo: consider more effective error handling
     }
 }

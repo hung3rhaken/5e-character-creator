@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.PropertyNameCaseInsensitive = GlobalJsonOptions.PropertyNameCaseInsensitive;
+    options.SerializerOptions.ReferenceHandler = GlobalJsonOptions.ReferenceHandler;
     options.SerializerOptions.WriteIndented = GlobalJsonOptions.WriteIndented;
 });
 

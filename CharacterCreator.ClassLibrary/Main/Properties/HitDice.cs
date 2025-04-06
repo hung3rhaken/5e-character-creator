@@ -8,7 +8,11 @@ public class HitDice
 
     public int MaxAmount { get; set; }
 
-    [JsonConstructor]
+    public HitDice()
+    {
+        
+    }
+
     public HitDice(int die, int maxAmount)
     {
         Die = die;

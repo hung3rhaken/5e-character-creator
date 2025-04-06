@@ -1,4 +1,6 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterData;
+using System.Text.RegularExpressions;
+using System;
 
 namespace CharacterCreator.ClassLibrary.Utilities.Services;
 
@@ -48,15 +50,29 @@ public static class ValueCalculator
 
     public static void CalculateProficiencyBonus(this Character character)
     {
-        character.ProficiencyBonus = (character.Level / 4) + 2;
+        character.ProficiencyBonus = (int)(1 + Math.Ceiling((double)character.Level / 4));
     }
 
-    public static void CalculateSkillProficiencies(Character character)
+    public static void CalculateSkillProficiencies(this Character character)
     {
-        foreach(var skill in character.AllSkills)
-        {
-            skill.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
-        }
+        character.Acrobatics.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.AnimalHandling.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Arcana.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Athletics.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Deception.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.History.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Insight.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Intimidation.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Investigation.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Medicine.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Nature.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Perception.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Performance.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Persuasion.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Religion.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.SlightOfHand.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Stealth.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        character.Survival.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
     }
 
     private static int CalculateFirstLevelMaxHitpoints(int hitDieValue, int conModifier)

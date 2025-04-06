@@ -77,10 +77,32 @@ public class Character
     public bool IsInitialAbilityAllocation { get; set; }
 
     [JsonIgnore]
-    public IEnumerable<Skill> AllSkills => 
-        new List<Skill> 
+    public List<Skill> AllSkills { get; init; }
+
+    public Character()
+    {
+        
+    }
+
+    public Character(CharacterClass characterClass)
+    {
+        Name = "New Guy";
+        Level = 1;
+        CharacterClass = characterClass;
+
+        Background = "Artisan";
+        Species = "Human";
+        Alignment = "Neutral Good";
+        Size = "Medium";
+        Speed = 30;
+
+        InitialiseAbilities();
+        characterClass.ApplyDefaultAbilityValues(this);
+        InitialiseSkills();
+
+        AllSkills = new List<Skill>
         {
-            Acrobatics, 
+            Acrobatics,
             AnimalHandling,
             Arcana,
             Athletics,
@@ -100,26 +122,39 @@ public class Character
             Survival
         };
 
-    public Character(CharacterClass characterClass)
-    {
-        Name = "New Guy";
-        Level = 1;
-        CharacterClass = characterClass;
-
-        Background = "Artisan";
-        Species = "Human";
-        Alignment = "Neutral Good";
-        Size = "Medium";
-        Speed = 30;
-
-        //ProficiencyBonus = 2;
-        //ArmorClass = 13;
-        //MaxHitPoints = 10;
-        //CurrentHitPoints = MaxHitPoints;
-        //Initiative = 2;
-        //PassivePerception = 12;
-
         IsNewCharater = true;
         IsInitialAbilityAllocation = true;
+    }
+
+    private void InitialiseAbilities()
+    {
+        Strength = new Ability("Strength", 10);
+        Dexterity = new Ability("Dexterity", 10);
+        Constitution = new Ability("Constitution", 10);
+        Intelligence = new Ability("Intelligence", 10);
+        Wisdom = new Ability("Wisdom", 10);
+        Charisma = new Ability("Charisma", 10);
+    }
+
+    private void InitialiseSkills()
+    {
+        Acrobatics = new Skill("Acrobatics", Dexterity);
+        AnimalHandling = new Skill("AnimalHandling", Wisdom);
+        Arcana = new Skill("Arcana", Intelligence);
+        Athletics = new Skill("Athletics", Strength);
+        Deception = new Skill("Deception", Charisma);
+        History = new Skill("History", Intelligence);
+        Insight = new Skill("Insight", Wisdom);
+        Intimidation = new Skill("Intimidation", Charisma);
+        Investigation = new Skill("Investigation", Intelligence);
+        Medicine = new Skill("Medicine", Wisdom);
+        Nature = new Skill("Nature", Intelligence);
+        Perception = new Skill("Perception", Wisdom);
+        Performance = new Skill("Performance", Charisma);
+        Persuasion = new Skill("Persuasion", Charisma);
+        Religion = new Skill("Religion", Intelligence);
+        SlightOfHand = new Skill("SlightOfHand", Dexterity);
+        Stealth = new Skill("Stealth", Dexterity);
+        Survival = new Skill("Survival", Wisdom);
     }
 }

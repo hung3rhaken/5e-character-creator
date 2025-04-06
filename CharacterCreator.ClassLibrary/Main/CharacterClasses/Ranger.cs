@@ -8,6 +8,18 @@ public class Ranger : CharacterClass
 
     protected override int HitDieValue => 10;
 
+    protected override int DefaultStrength => 12;
+    protected override int DefaultDexterity => 15;
+    protected override int DefaultConstitution => 13;
+    protected override int DefaultIntelligence => 8;
+    protected override int DefaultWisdom => 14;
+    protected override int DefaultCharisma => 10;
+
+    public Ranger()
+    {
+        
+    }
+
     public Ranger(int classLevel = 1) : base(classLevel)
     {
         HitDice = new(HitDieValue, classLevel);
@@ -20,11 +32,11 @@ public class Ranger : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength = new Ability("Strength", 12);
-        character.Dexterity = new Ability("Dexterity", 15);
-        character.Constitution = new Ability("Constitution", 13);
-        character.Intelligence = new Ability("Intelligence", 8);
-        character.Wisdom = new Ability("Wisdom", 14);
-        character.Charisma = new Ability("Charisma", 10);
+        character.Strength.Score = DefaultStrength;
+        character.Dexterity.Score = DefaultDexterity;
+        character.Constitution.Score = DefaultConstitution;
+        character.Intelligence.Score = DefaultIntelligence;
+        character.Wisdom.Score = DefaultWisdom;
+        character.Charisma.Score = DefaultCharisma;
     }
 }

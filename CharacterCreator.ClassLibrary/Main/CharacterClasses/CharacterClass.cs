@@ -24,6 +24,13 @@ public abstract class CharacterClass
     public virtual HitDice HitDice { get; set; }
 
     protected abstract int HitDieValue { get; }
+    protected abstract int DefaultStrength { get; }
+    protected abstract int DefaultDexterity { get; }
+    protected abstract int DefaultConstitution { get; }
+    protected abstract int DefaultIntelligence { get; }
+    protected abstract int DefaultWisdom { get; }
+    protected abstract int DefaultCharisma { get; }
+
 
     protected CharacterClass(int classLevel = 1)
     {
@@ -41,7 +48,15 @@ public abstract class CharacterClass
     /// Applies default class ability scores to the character
     /// </summary>
     /// <param name="character"></param>
-    public abstract void ApplyDefaultAbilityValues(Character character);
+    public virtual void ApplyDefaultAbilityValues(Character character)
+    {
+        character.Strength.Score = DefaultStrength;
+        character.Dexterity.Score = DefaultDexterity;
+        character.Constitution.Score = DefaultConstitution;
+        character.Intelligence.Score = DefaultIntelligence;
+        character.Wisdom.Score = DefaultWisdom;
+        character.Charisma.Score = DefaultCharisma;
+    }
 
     /// <summary>
     /// 

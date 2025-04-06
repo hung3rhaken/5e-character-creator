@@ -8,6 +8,18 @@ public class Rogue : CharacterClass
 
     protected override int HitDieValue => 8;
 
+    protected override int DefaultStrength => 12;
+    protected override int DefaultDexterity => 15;
+    protected override int DefaultConstitution => 13;
+    protected override int DefaultIntelligence => 14;
+    protected override int DefaultWisdom => 10;
+    protected override int DefaultCharisma => 8;
+
+    public Rogue()
+    {
+        
+    }
+
     public Rogue(int classLevel = 1) : base(classLevel)
     {
         HitDice = new(HitDieValue, classLevel);
@@ -20,11 +32,11 @@ public class Rogue : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength = new Ability("Strength", 12);
-        character.Dexterity = new Ability("Dexterity", 15);
-        character.Constitution = new Ability("Constitution", 13);
-        character.Intelligence = new Ability("Intelligence", 14);
-        character.Wisdom = new Ability("Wisdom", 10);
-        character.Charisma = new Ability("Charisma", 8);
+        character.Strength.Score = DefaultStrength;
+        character.Dexterity.Score = DefaultDexterity;
+        character.Constitution.Score = DefaultConstitution;
+        character.Intelligence.Score = DefaultIntelligence;
+        character.Wisdom.Score = DefaultWisdom;
+        character.Charisma.Score = DefaultCharisma;
     }
 }

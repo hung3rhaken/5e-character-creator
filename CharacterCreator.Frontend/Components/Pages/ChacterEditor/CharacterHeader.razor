@@ -159,8 +159,10 @@
         await CharacterHeaderChanged.InvokeAsync();
     }
 
-    private void OnLevelChanged(int newLevel)
+    private async Task OnLevelChanged(int newLevel)
     {
         CharacterCreateAndUpdateService.CharacterLevelUp(Character, newLevel);
+
+        await CharacterHeaderChanged.InvokeAsync();
     }
 }

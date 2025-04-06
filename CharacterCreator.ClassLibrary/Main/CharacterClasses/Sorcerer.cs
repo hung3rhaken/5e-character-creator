@@ -8,6 +8,18 @@ public class Sorcerer : CharacterClass
 
     protected override int HitDieValue => 6;
 
+    protected override int DefaultStrength => 10;
+    protected override int DefaultDexterity => 13;
+    protected override int DefaultConstitution => 14;
+    protected override int DefaultIntelligence => 8;
+    protected override int DefaultWisdom => 12;
+    protected override int DefaultCharisma => 15;
+
+    public Sorcerer()
+    {
+        
+    }
+
     public Sorcerer(int classLevel = 1) : base(classLevel) 
     {
         HitDice = new(HitDieValue, classLevel); 
@@ -20,11 +32,11 @@ public class Sorcerer : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength = new Ability("Strength", 10);
-        character.Dexterity = new Ability("Dexterity", 13);
-        character.Constitution = new Ability("Constitution", 14);
-        character.Intelligence = new Ability("Intelligence", 8);
-        character.Wisdom = new Ability("Wisdom", 12);
-        character.Charisma = new Ability("Charisma", 15);
+        character.Strength.Score = DefaultStrength;
+        character.Dexterity.Score = DefaultDexterity;
+        character.Constitution.Score = DefaultConstitution;
+        character.Intelligence.Score = DefaultIntelligence;
+        character.Wisdom.Score = DefaultWisdom;
+        character.Charisma.Score = DefaultCharisma;
     }
 }

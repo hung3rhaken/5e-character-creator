@@ -28,9 +28,9 @@ public static class CharacterCreateAndUpdateService
         var character = new Character(characterClass)
         {
             Level = characterLevel
-        };        
+        };
 
-        character.UpdateCharacterValues();
+        UpdateCharacterValues(character);
 
         return character;
     }
@@ -50,11 +50,11 @@ public static class CharacterCreateAndUpdateService
             if (character.IsInitialAbilityAllocation)
             {
                 character.CharacterClass.ApplyDefaultAbilityValues(character);
-                character.InitialiseSkills();
-            }            
+            }
         }
 
         character.CalculateProficiencyBonus();
+        character.CalculateSkillProficiencies();
         character.CalculateArmorClass();
         character.CalculateMaxHitDice();
         character.CalculateMaxHitPoints();
@@ -71,27 +71,5 @@ public static class CharacterCreateAndUpdateService
         }
         // Optionally throw or return a default if type is not found.
         throw new ArgumentException($"Invalid character class type: {type}");
-    }
-
-    private static void InitialiseSkills(this Character character)
-    {       
-        character.Acrobatics      = new Skill("Acrobatics", character.Dexterity);
-        character.AnimalHandling  = new Skill("AnimalHandling", character.Wisdom);
-        character.Arcana          = new Skill("Arcana", character.Intelligence);
-        character.Athletics       = new Skill("Athletics", character.Strength);
-        character.Deception       = new Skill("Deception", character.Charisma);
-        character.History         = new Skill("History", character.Intelligence);
-        character.Insight         = new Skill("Insight", character.Wisdom);
-        character.Intimidation    = new Skill("Intimidation", character.Charisma);
-        character.Investigation   = new Skill("Investigation", character.Intelligence);
-        character.Medicine        = new Skill("Medicine", character.Wisdom);
-        character.Nature          = new Skill("Nature", character.Intelligence);
-        character.Perception      = new Skill("Perception", character.Wisdom);
-        character.Performance     = new Skill("Performance", character.Charisma);
-        character.Persuasion      = new Skill("Persuasion", character.Charisma);
-        character.Religion        = new Skill("Religion", character.Intelligence);
-        character.SlightOfHand    = new Skill("SlightOfHand", character.Dexterity);
-        character.Stealth         = new Skill("Stealth", character.Dexterity);
-        character.Survival        = new Skill("Survival", character.Wisdom);
     }
 }

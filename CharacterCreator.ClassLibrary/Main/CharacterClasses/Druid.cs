@@ -8,6 +8,18 @@ public class Druid : CharacterClass
 
     protected override int HitDieValue => 8;
 
+    protected override int DefaultStrength => 8;
+    protected override int DefaultDexterity => 12;
+    protected override int DefaultConstitution => 14;
+    protected override int DefaultIntelligence => 13;
+    protected override int DefaultWisdom => 15;
+    protected override int DefaultCharisma => 10;
+
+    public Druid()
+    {
+         
+    }
+
     public Druid(int classLevel = 1) : base(classLevel) 
     { 
         HitDice = new(HitDieValue, classLevel);
@@ -20,11 +32,11 @@ public class Druid : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength = new Ability("Strength", 8);
-        character.Dexterity = new Ability("Dexterity", 12);
-        character.Constitution = new Ability("Constitution", 14);
-        character.Intelligence = new Ability("Intelligence", 13);
-        character.Wisdom = new Ability("Wisdom", 15);
-        character.Charisma = new Ability("Charisma", 10);
+        character.Strength.Score = DefaultStrength;
+        character.Dexterity.Score = DefaultDexterity;
+        character.Constitution.Score = DefaultConstitution;
+        character.Intelligence.Score = DefaultIntelligence;
+        character.Wisdom.Score = DefaultWisdom;
+        character.Charisma.Score = DefaultCharisma;
     }
 }
