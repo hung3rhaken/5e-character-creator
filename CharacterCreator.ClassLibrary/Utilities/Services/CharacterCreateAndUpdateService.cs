@@ -28,9 +28,9 @@ public static class CharacterCreateAndUpdateService
         var character = new Character(characterClass)
         {
             Level = characterLevel
-        };
+        };        
 
-        UpdateCharacterValues(character);
+        character.UpdateCharacterValues();
 
         return character;
     }
@@ -41,6 +41,25 @@ public static class CharacterCreateAndUpdateService
         character.CharacterClass.ClassLevel = characterLevel;
 
         UpdateCharacterValues(character);
+    }
+
+    public static void UpdateCharacterValues(this Character character)
+    {
+        if (character.IsNewCharater)
+        {
+            if (character.IsInitialAbilityAllocation)
+            {
+                character.CharacterClass.ApplyDefaultAbilityValues(character);
+                character.InitialiseSkills();
+            }            
+        }
+
+        character.CalculateProficiencyBonus();
+        character.CalculateArmorClass();
+        character.CalculateMaxHitDice();
+        character.CalculateMaxHitPoints();
+        character.CalculateInititative();
+        character.CalculatePassivePerception();
     }
 
     public static CharacterClass GetCharacterClassInstance(CharacterClassType type, int classLevel = 1)
@@ -54,21 +73,25 @@ public static class CharacterCreateAndUpdateService
         throw new ArgumentException($"Invalid character class type: {type}");
     }
 
-    public static void UpdateCharacterValues(Character character)
-    {
-        if (character.IsNewCharater)
-        {
-            if (character.IsInitialAbilityAllocation)
-            {
-                character.CharacterClass.ApplyDefaultAbilityValues(character);
-            }            
-        }
-
-        character.CalculateArmorClass();
-        character.CalculateMaxHitDice();
-        character.CalculateMaxHitPoints();
-        character.CalculateInititative();
-        character.CalculatePassivePerception();
-        character.CalculateProficiencyBonus();
+    private static void InitialiseSkills(this Character character)
+    {       
+        character.Acrobatics      = new Skill("Acrobatics", character.Dexterity);
+        character.AnimalHandling  = new Skill("AnimalHandling", character.Wisdom);
+        character.Arcana          = new Skill("Arcana", character.Intelligence);
+        character.Athletics       = new Skill("Athletics", character.Strength);
+        character.Deception       = new Skill("Deception", character.Charisma);
+        character.History         = new Skill("History", character.Intelligence);
+        character.Insight         = new Skill("Insight", character.Wisdom);
+        character.Intimidation    = new Skill("Intimidation", character.Charisma);
+        character.Investigation   = new Skill("Investigation", character.Intelligence);
+        character.Medicine        = new Skill("Medicine", character.Wisdom);
+        character.Nature          = new Skill("Nature", character.Intelligence);
+        character.Perception      = new Skill("Perception", character.Wisdom);
+        character.Performance     = new Skill("Performance", character.Charisma);
+        character.Persuasion      = new Skill("Persuasion", character.Charisma);
+        character.Religion        = new Skill("Religion", character.Intelligence);
+        character.SlightOfHand    = new Skill("SlightOfHand", character.Dexterity);
+        character.Stealth         = new Skill("Stealth", character.Dexterity);
+        character.Survival        = new Skill("Survival", character.Wisdom);
     }
 }

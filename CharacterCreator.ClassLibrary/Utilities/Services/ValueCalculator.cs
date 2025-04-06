@@ -28,6 +28,7 @@ public static class ValueCalculator
         }
 
         character.MaxHitPoints = hitpoints;
+        character.CurrentHitPoints = hitpoints;
     }
 
     public static void CalculateMaxHitDice(this Character character)
@@ -42,12 +43,20 @@ public static class ValueCalculator
 
     public static void CalculatePassivePerception(this Character character)
     {
-        character.PassivePerception = StaticBaseValues.BasePerception + character.Wisdom.Modifier; // Todo: placeholder, actuallz needs to be calculated from Perception
+        character.PassivePerception = StaticBaseValues.BasePerception + character.Perception.Modifier; // Todo: placeholder, actually needs to be calculated from Perception
     }
 
     public static void CalculateProficiencyBonus(this Character character)
     {
         character.ProficiencyBonus = (character.Level / 4) + 2;
+    }
+
+    public static void CalculateSkillProficiencies(Character character)
+    {
+        foreach(var skill in character.AllSkills)
+        {
+            skill.CalculateSkillProficiencyModifier(character.ProficiencyBonus);
+        }
     }
 
     private static int CalculateFirstLevelMaxHitpoints(int hitDieValue, int conModifier)
@@ -58,5 +67,20 @@ public static class ValueCalculator
     private static int CalculateSubsequentLevelMaxHitpoints(int hitDieValue, int conModifier, int classLevel)
     {
         return ((hitDieValue/2 + 1) + conModifier) * classLevel;
+    }
+
+    private static void CalculateSkillProficiencyModifier(this Skill skill, int proficiencyBonus)
+    {
+        skill.Modifier = skill.BaseAbility.Modifier;
+
+        if (skill.HasProficiency)
+        {
+            skill.Modifier += proficiencyBonus;
+
+            if (skill.HasExpertise) 
+            {
+                skill.Modifier += proficiencyBonus;
+            }
+        }
     }
 }

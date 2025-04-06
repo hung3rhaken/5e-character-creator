@@ -6,7 +6,7 @@ public class Bard : CharacterClass
 {
     public override string Name { get; set; } = "Bard";
 
-    protected override int HitDieValue => 12;
+    protected override int HitDieValue => 8;
 
     public Bard(int classLevel = 1) : base(classLevel)
     {
