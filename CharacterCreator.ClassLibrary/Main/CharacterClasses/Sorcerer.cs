@@ -32,11 +32,8 @@ public class Sorcerer : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength.Score = DefaultStrength;
-        character.Dexterity.Score = DefaultDexterity;
-        character.Constitution.Score = DefaultConstitution;
-        character.Intelligence.Score = DefaultIntelligence;
-        character.Wisdom.Score = DefaultWisdom;
-        character.Charisma.Score = DefaultCharisma;
+        base.ApplyDefaultAbilityValues(character);
+        character.Charisma.HasSavingThrowProficiency = true;
+        character.Constitution.HasSavingThrowProficiency = true;
     }
 }

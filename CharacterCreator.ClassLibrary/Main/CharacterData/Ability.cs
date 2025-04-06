@@ -5,6 +5,7 @@ public class Ability
     public string Name { get; set; }
     public int Score { get; set; }
     public int Modifier { get => CalculateModifier(Score); }
+    public bool HasSavingThrowProficiency { get; set; }
 
     public Ability()
     {
@@ -15,6 +16,7 @@ public class Ability
     {
         Name = name;
         Score = score;
+        HasSavingThrowProficiency = false;
     }
 
     private int CalculateModifier(int score)

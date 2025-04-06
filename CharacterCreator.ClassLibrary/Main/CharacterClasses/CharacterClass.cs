@@ -24,6 +24,7 @@ public abstract class CharacterClass
     public virtual HitDice HitDice { get; set; }
 
     protected abstract int HitDieValue { get; }
+
     protected abstract int DefaultStrength { get; }
     protected abstract int DefaultDexterity { get; }
     protected abstract int DefaultConstitution { get; }

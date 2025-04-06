@@ -32,11 +32,8 @@ public class Rogue : CharacterClass
 
     public override void ApplyDefaultAbilityValues(Character character)
     {
-        character.Strength.Score = DefaultStrength;
-        character.Dexterity.Score = DefaultDexterity;
-        character.Constitution.Score = DefaultConstitution;
-        character.Intelligence.Score = DefaultIntelligence;
-        character.Wisdom.Score = DefaultWisdom;
-        character.Charisma.Score = DefaultCharisma;
+        base.ApplyDefaultAbilityValues(character);
+        character.Dexterity.HasSavingThrowProficiency = true;
+        character.Intelligence.HasSavingThrowProficiency = true;
     }
 }
