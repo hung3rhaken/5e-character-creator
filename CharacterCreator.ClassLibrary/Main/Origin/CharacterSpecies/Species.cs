@@ -10,4 +10,9 @@ public abstract class Species
     {
 
     }
+
+    public virtual void ApplyInitialSpeciesBenefits(Character character)
+    {
+
+    }
 }

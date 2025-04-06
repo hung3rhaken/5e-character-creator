@@ -1,4 +1,5 @@
 ﻿using CharacterCreator.ClassLibrary.Main.CharacterClasses;
+using CharacterCreator.ClassLibrary.Main.Origin.CharacterSpecies;
 using CharacterCreator.ClassLibrary.Main.Properties;
 using System.Numerics;
 using System.Text.Json.Serialization;
@@ -16,7 +17,7 @@ public class Character
 
     #region Origin
     public string Background { get; set; }
-    public string Species { get; set; }
+    public Species Species { get; set; }
     public Alignment Alignment { get; set; }
     public Size Size { get; set; }
     //public string Size { get; set; }
@@ -85,14 +86,14 @@ public class Character
 
     }
 
-    public Character(CharacterClass characterClass)
+    public Character(CharacterClass characterClass, Species species)
     {
         Name = "New Guy";
         Level = 1;
         CharacterClass = characterClass;
 
         Background = "Artisan";
-        Species = "Human";
+        Species = species;
         Alignment = Alignment.NeutralGood;
         Size = Size.Medium;
         Speed = 30;
@@ -100,6 +101,7 @@ public class Character
         InitialiseAbilities();
         characterClass.ApplyDefaultAbilityValues(this);
         InitialiseSkills();
+        species.ApplyInitialSpeciesBenefits(this);
 
         AllSkills = new List<Skill>
         {

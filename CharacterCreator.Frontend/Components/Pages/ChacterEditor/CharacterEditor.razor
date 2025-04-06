@@ -5,6 +5,7 @@
 
 @using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Main.Origin.CharacterSpecies
 @using CharacterCreator.ClassLibrary.Utilities.Services
 @using CharacterCreator.Frontend.Services
 @using System.Text.Json
@@ -89,14 +90,14 @@ else
         else
         {
             selectedCharacter = "";
-            character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
+            character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter, CharacterSpeciesType.Aasimar);
         }
     }
 
     private void NewCharacter()
     {
         selectedCharacter = "";
-        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
+        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter, CharacterSpeciesType.Aasimar);
     } 
 
     private async Task SaveCharacter(MouseEventArgs e)
