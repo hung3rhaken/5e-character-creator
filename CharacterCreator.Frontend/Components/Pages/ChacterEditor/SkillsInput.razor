@@ -1,14 +1,30 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 
-<div class="skill-editor">
-    <h3>@Skill.Name</h3>
-    <p>Value: @Skill.Modifier</p>
-    <div>
-        <label>Proficiency</label>
-        <InputCheckbox type="checkbox" Value="Skill.HasProficiency" ValueChanged="ProficiencyChanged" ValueExpression="() => Skill.HasProficiency" />
+<div class="skill-card">
+    <div class="skill-header">
+        <span class="skill-header-label">@Skill.Name:</span>
+        <span class="skill-header-mod">@ModifierDisplay</span>
     </div>
-        <label>Expertise</label>
-    <InputCheckbox type="checkbox" Value="Skill.HasExpertise" ValueChanged="ExpertiseChanged" ValueExpression="() => Skill.HasExpertise" disabled="Skill.HasProficiency == false" />
+    <div class="checkbox-group">
+
+        <div>
+            @* <label>E</label> *@
+            <input type="checkbox" class="skill-checkbox"
+                   @bind:get="Skill.HasProficiency"
+                   @bind:set="OnProficiencyChanged"
+                   @bind:event="oninput"
+                   ValueExpression="() => Skill.HasExpertise" />
+        </div>
+        <div>
+            @* <label>E</label> *@
+            <input type="checkbox" class="skill-checkbox"
+                   @bind:get="Skill.HasExpertise"
+                   @bind:set="OnExpertiseChanged"
+                   @bind:event="oninput"
+                   ValueExpression="() => Skill.HasExpertise"
+                   disabled="@(Skill.HasProficiency == false)" />
+        </div>
+    </div>
 </div>
 
 @code {
@@ -21,4 +37,16 @@
     [Parameter]
     public EventCallback<bool> ExpertiseChanged { get; set; }
 
+    private async Task OnProficiencyChanged(bool e)
+    {
+        await ProficiencyChanged.InvokeAsync(e);
+    }
+
+    private async Task OnExpertiseChanged(bool e)
+    {
+        await ExpertiseChanged.InvokeAsync(e);
+    }
+
+    // Return the modifier as a string with a '+' if it is non-negative.
+    private string ModifierDisplay => Skill.Modifier > 0 ? $"+{Skill.Modifier}" : Skill.Modifier.ToString();
 }
