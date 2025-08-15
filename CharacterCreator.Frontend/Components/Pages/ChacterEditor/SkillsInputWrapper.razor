@@ -1,14 +1,25 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 
-@rendermode InteractiveServer
-
-
-<h3>SkillsInputWrapper</h3>
+@* <h3>SkillsInputWrapper</h3>
 <SkillsInput 
     Skill="Character.Stealth" 
     ProficiencyChanged="@(value => UpdateSkillProficiency(Character.Stealth, value))"
     ExpertiseChanged="@(value => UpdateSkillExpertise(Character.Stealth, value))">
-</SkillsInput>
+</SkillsInput> *@
+
+<div class="skills-container mb-4">
+    <h4>Skills</h4>
+    <div class="skills-grid">
+        <!-- Repeat a SkillsInput component for each skill. Here's one example for Stealth -->
+        @foreach (var skill in Character.AllSkills)
+        {
+            <SkillsInput Skill="skill"
+                         ProficiencyChanged="@(value => UpdateSkillProficiency(skill, value))"
+                         ExpertiseChanged="@(value => UpdateSkillExpertise(skill, value))" />
+        }
+
+    </div>
+</div>
 
 @code {
     [Parameter]
@@ -17,9 +28,13 @@
     [Parameter]
     public EventCallback SkillsChanged { get; set; }
 
-    private async Task UpdateSkillProficiency(Skill skill, bool newValue)
+    private async Task UpdateSkillProficiency(Skill skill, bool hasProficiency)
     {
-        skill.HasProficiency = newValue;
+        skill.HasProficiency = hasProficiency;
+
+        if (hasProficiency is false)
+            skill.HasExpertise = false;
+
         await SkillsChanged.InvokeAsync();
     }
 

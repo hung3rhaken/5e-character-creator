@@ -1,5 +1,7 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Main.Origin.CharacterSpecies
+@using CharacterCreator.ClassLibrary.Main.Properties
 @using CharacterCreator.ClassLibrary.Utilities.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
@@ -9,7 +11,7 @@
 
     <!-- Persistent Data Section -->
     <div class="persistent-data mb-4">
-        <h4>Persistent Data</h4>
+        <h4>Origin</h4>
         <div class="row">
             <!-- Column 1: Name, Species, Class -->
             <div class="col-md-4">
@@ -19,11 +21,17 @@
                 </div>
                 <div class="form-group">
                     <label>Species:</label>
-                    <InputText class="form-control" @bind-Value="Character.Species" />
+                    @* <InputText class="form-control" @bind-Value="Character.Species" /> *@
+                    <select value="@selectedSpecies" @onchange="OnCharacterSpeciesChanged" class="form-control d-inline-block" style="max-width: 300px;">
+                        @foreach (var species in Enum.GetValues(typeof(CharacterSpeciesType)))
+                        {
+                            <option value="@species">@species</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Class:</label>
-                    <select value="@selectedClassType" @onchange="OnCharacterClassChanged" class="form-control d-inline-block" style="max-width: 300px;">                        
+                    <select value="@selectedClass" @onchange="OnCharacterClassChanged" class="form-control d-inline-block" style="max-width: 300px;">
                         @foreach (var characterClass in Enum.GetValues(typeof(CharacterClassType)))
                         {
                             <option value="@characterClass">@characterClass</option>
@@ -44,7 +52,7 @@
                 <div class="form-group">
                     <label>Alignment:</label>
                     <select @bind="Character.Alignment" class="form-control">
-                        @foreach (var alignment in Alignments)
+                        @foreach (var alignment in Enum.GetValues(typeof(Alignment)))
                         {
                             <option value="@alignment">@alignment</option>
                         }
@@ -55,7 +63,13 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Size:</label>
-                    <InputText type="text" class="form-control" @bind-Value="Character.Size" />
+                    @* <InputText type="text" class="form-control" @bind-Value="Character.Size" /> *@
+                    <select @bind="Character.Size" class="form-control">
+                        @foreach (var size in Enum.GetValues(typeof(Size)))
+                        {
+                            <option value="@size">@size</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Speed:</label>
@@ -67,20 +81,20 @@
 
     <!-- Semi-Persistent Data Section -->
     <div class="semi-persistent-data">
-        <h4>Semi-Persistent Data</h4>
+        <h4>Main Stats</h4>
         <div class="row">
             <!-- Column 1: Level, Armor Class, Max Hit Points -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Level:</label>
-                    <InputNumber class="form-control" 
-                    TValue="int" Value="Character.Level" 
-                    ValueExpression="() => Character.Level" 
-                    ValueChanged="(value) => OnLevelChanged(value)"/>
+                    <InputNumber class="form-control"
+                    TValue="int" Value="Character.Level"
+                    ValueExpression="() => Character.Level"
+                    ValueChanged="(value) => OnLevelChanged(value)" />
                 </div>
                 <div class="form-group">
                     <label>Armor Class (AC):</label>
-                    <input type="text" class="form-control" value="@Character.ArmorClass" readonly/>
+                    <input type="text" class="form-control" value="@Character.ArmorClass" readonly />
                 </div>
                 <div class="form-group">
                     <label>Max Hit Points:</label>
@@ -91,14 +105,29 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Hit Die:</label>
-                    <input type="text" class="form-control" value="@Character.CharacterClass.HitDice" readonly/>
+                    <input type="text" class="form-control" value="@Character.CharacterClass.HitDice" readonly />
                 </div>
                 <div class="form-group">
                     <label>Max Hit Die:</label>
-                    <input type="number" class="form-control" value="@Character.CharacterClass.HitDice.MaxAmount" readonly/>
+                    <input type="number" class="form-control" value="@Character.CharacterClass.HitDice.MaxAmount" readonly />
                 </div>
             </div>
             <!-- Column 3: Initiative, Passive Perception, Proficiency Bonus -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Initiative:</label>
+                    <input type="text" class="form-control" value="@Character.Initiative" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Passive Perception:</label>
+                    <input type="text" class="form-control" value="@Character.PassivePerception" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Proficiency Bonus:</label>
+                    <input type="text" class="form-control" value="@Character.ProficiencyBonus" readonly />
+                </div>
+            </div>
+            <!-- Column 4: Whatever -->
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Initiative:</label>
@@ -124,22 +153,19 @@
     [Parameter]
     public EventCallback CharacterHeaderChanged { get; set; }
 
-    private CharacterClassType selectedClassType;
-
-    private List<string> Alignments;
+    private CharacterClassType selectedClass;
+    private CharacterSpeciesType selectedSpecies;
 
     protected override void OnInitialized()
     {
         if (Enum.TryParse<CharacterClassType>(Character.CharacterClass.Name, out var type))
         {
-            selectedClassType = type;
+            selectedClass = type;
         }
         else
         {
-            selectedClassType = CharacterClassType.Fighter;
+            selectedClass = CharacterClassType.Fighter;
         }
-
-        Alignments = AlignmentType.GetAllAlignments();
     }
 
     public async Task OnCharacterClassChanged(ChangeEventArgs e)
@@ -151,6 +177,23 @@
         else
         {
             Character.CharacterClass = CharacterCreateAndUpdateService.GetCharacterClassInstance(CharacterClassType.Fighter, Character.Level);
+        }
+
+        if (Character.IsNewCharater)
+            Character.IsInitialAbilityAllocation = true;
+
+        await CharacterHeaderChanged.InvokeAsync();
+    }
+
+    public async Task OnCharacterSpeciesChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<CharacterSpeciesType>(e.Value.ToString(), out var selectedSpecies))
+        {
+            Character.Species = CharacterCreateAndUpdateService.GetCharacterSpeciesInstance(selectedSpecies);
+        }
+        else
+        {
+            Character.Species = CharacterCreateAndUpdateService.GetCharacterSpeciesInstance(CharacterSpeciesType.Aasimar);
         }
 
         if (Character.IsNewCharater)

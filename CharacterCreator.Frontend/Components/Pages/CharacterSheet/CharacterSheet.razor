@@ -1,6 +1,7 @@
 ﻿@page "/character"
 @using CharacterCreator.ClassLibrary.Main.CharacterData
 @using CharacterCreator.ClassLibrary.Main.CharacterClasses
+@using CharacterCreator.ClassLibrary.Main.Origin.CharacterSpecies
 @using CharacterCreator.ClassLibrary.Utilities.Services
 
 <h1>Character Sheet</h1>
@@ -14,17 +15,17 @@ else
     <div class="character-details">
         <p><strong>Name:</strong> @character.Name</p>
         <p><strong>Class:</strong> @character.CharacterClass?.Name</p>
-        <p><strong>Species:</strong> @character.Species</p>
+        <p><strong>Species:</strong> @character.Species.Name</p>
         <p><strong>Level:</strong> @character.Level</p>
 
         <h3>Main Attributes</h3>
         <ul>
-            <li><strong>Strength:</strong> @character.Strength</li>
-            <li><strong>Dexterity:</strong> @character.Dexterity</li>
-            <li><strong>Constitution:</strong> @character.Constitution</li>
-            <li><strong>Intelligence:</strong> @character.Intelligence</li>
-            <li><strong>Wisdom:</strong> @character.Wisdom</li>
-            <li><strong>Charisma:</strong> @character.Charisma</li>
+            <li><strong>Strength:</strong> @character.Strength.Score</li>
+            <li><strong>Dexterity:</strong> @character.Dexterity.Score</li>
+            <li><strong>Constitution:</strong> @character.Constitution.Score</li>
+            <li><strong>Intelligence:</strong> @character.Intelligence.Score</li>
+            <li><strong>Wisdom:</strong> @character.Wisdom.Score</li>
+            <li><strong>Charisma:</strong> @character.Charisma.Score</li>
         </ul>
     </div>
 }
@@ -35,6 +36,6 @@ else
     protected override void OnInitialized()
     {
         // Create a dummy character with hardcoded values
-        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter);
+        character = CharacterCreateAndUpdateService.CreateNewCharacter(CharacterClassType.Fighter, CharacterSpeciesType.Aasimar);
     }
 }

@@ -1,12 +1,15 @@
 ﻿@using CharacterCreator.ClassLibrary.Main.CharacterData
 
-<div class="abilities-row">
-    <AbilityInput Ability="@Character.Strength" ScoreChanged="@(value => UpdateScore(Character.Strength, value))" />
-    <AbilityInput Ability="@Character.Dexterity" ScoreChanged="@(value => UpdateScore(Character.Dexterity, value))" />
-    <AbilityInput Ability="@Character.Constitution" ScoreChanged="@(value => UpdateScore(Character.Constitution, value))" />
-    <AbilityInput Ability="@Character.Intelligence" ScoreChanged="@(value => UpdateScore(Character.Intelligence, value))" />
-    <AbilityInput Ability="@Character.Wisdom" ScoreChanged="@(value => UpdateScore(Character.Wisdom, value))" />
-    <AbilityInput Ability="@Character.Charisma" ScoreChanged="@(value => UpdateScore(Character.Charisma, value))" />
+<div class="ability-container mb-4">
+    <h4>Abilities</h4>
+    <div class="abilities-row ">
+        <AbilityInput Ability="@Character.Strength" ScoreChanged="@(value => UpdateScore(Character.Strength, value))" />
+        <AbilityInput Ability="@Character.Dexterity" ScoreChanged="@(value => UpdateScore(Character.Dexterity, value))" />
+        <AbilityInput Ability="@Character.Constitution" ScoreChanged="@(value => UpdateScore(Character.Constitution, value))" />
+        <AbilityInput Ability="@Character.Intelligence" ScoreChanged="@(value => UpdateScore(Character.Intelligence, value))" />
+        <AbilityInput Ability="@Character.Wisdom" ScoreChanged="@(value => UpdateScore(Character.Wisdom, value))" />
+        <AbilityInput Ability="@Character.Charisma" ScoreChanged="@(value => UpdateScore(Character.Charisma, value))" />
+    </div>
 </div>
 
 @code {
